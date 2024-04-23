@@ -1,0 +1,24 @@
+{
+  "name": "base-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node ./test.ts",
+    "app": "ts-node ./app.ts",
+    "dev": "dotenvx run --env-file=.env.development -- yarn app",
+    "start": "dotenvx run --env-file=.env -- yarn app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^0.35.1",
+    "@types/node": "^20.12.7",
+    "cron": "^3.1.7",
+    "dotenv": "^16.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "viem": "^2.9.22"
+  }
+}
