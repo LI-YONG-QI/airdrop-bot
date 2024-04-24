@@ -33,8 +33,8 @@ async function withdraw(amount: bigint) {
 export async function aave() {
   const AMOUNT = parseEther("0.001");
 
-  //await deposit(AMOUNT);
-  //await withdraw(AMOUNT);
+  await deposit(AMOUNT);
+  await withdraw(AMOUNT);
 
   console.log("Contract address", AAVE.address);
 }
