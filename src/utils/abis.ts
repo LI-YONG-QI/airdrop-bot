@@ -155,7 +155,7 @@ export const AAVE_ABI = [
   { stateMutability: "payable", type: "receive" },
 ] as const;
 
-export const ATOKEN_ABI = [
+export const WETH_ABI = [
   {
     inputs: [{ internalType: "contract IPool", name: "pool", type: "address" }],
     stateMutability: "nonpayable",

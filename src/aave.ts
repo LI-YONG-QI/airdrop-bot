@@ -1,5 +1,5 @@
 import { zeroAddress, parseEther } from "viem";
-import { AAVE, ATOKEN } from "./utils/contracts";
+import { AAVE, WETH } from "./utils/contracts";
 import { SIGNER, SIGNER_ADDR, sendTransaction } from "./utils/clients";
 
 async function deposit(amount: bigint) {
@@ -15,7 +15,7 @@ async function deposit(amount: bigint) {
 }
 
 async function withdraw(amount: bigint) {
-  const { request: approveReq } = await ATOKEN.simulate.approve(
+  const { request: approveReq } = await WETH.simulate.approve(
     [AAVE.address, amount],
     { account: SIGNER.account }
   );

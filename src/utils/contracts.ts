@@ -1,9 +1,9 @@
-import { AAVE_ABI, ATOKEN_ABI } from "./abis";
+import { AAVE_ABI, WETH_ABI } from "./abis";
 import { Address, getContract } from "viem";
 import { PUBLIC_CLIENT } from "./clients";
 
 const AAVE_ADDR = process.env.AAVE as Address;
-const ATOKEN_ADDR = process.env.ATOKEN as Address;
+const WETH_ADDR = process.env.WETH as Address;
 
 export const AAVE = getContract({
   address: AAVE_ADDR,
@@ -11,8 +11,8 @@ export const AAVE = getContract({
   client: { public: PUBLIC_CLIENT },
 });
 
-export const ATOKEN = getContract({
-  address: ATOKEN_ADDR,
-  abi: ATOKEN_ABI,
+export const WETH = getContract({
+  address: WETH_ADDR,
+  abi: WETH_ABI,
   client: { public: PUBLIC_CLIENT },
 });

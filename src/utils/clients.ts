@@ -16,6 +16,7 @@ const CONFIG = {
 };
 
 export const PUBLIC_CLIENT = createPublicClient(CONFIG);
+
 export const SIGNER = createWalletClient({
   account: ACCOUNT,
   ...CONFIG,
@@ -26,8 +27,10 @@ export const SIGNER_ADDR = SIGNER.account.address;
 export async function sendTransaction(request: any, signer: WalletClient) {
   const hash = await signer.writeContract(request);
   const transaction = await PUBLIC_CLIENT.waitForTransactionReceipt({
+    confirmations: 2,
     hash,
   });
+
   console.log(
     `Tx Hash: ${transaction.transactionHash} - ${transaction.status}`
   );

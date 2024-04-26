@@ -2,7 +2,7 @@ import { CronJob } from "cron";
 import { aave } from "./src/aave";
 
 const config = {
-  cronTime: "* 0 10 * * *", // At 10:00.
+  cronTime: process.env.CRONJOB || "* * * * * *", // At 10:00.
   onTick: async function () {
     console.log("Start new round");
     await aave();
@@ -23,6 +23,7 @@ const app = new CronJob(
 function main() {
   console.log(`Starting app ...`);
   console.log(`Mode ${process.env.MODE}`);
+  console.log(`TIME ${process.env.CRONJOB}`);
   app.start();
 }
 
