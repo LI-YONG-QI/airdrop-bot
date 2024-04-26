@@ -1,6 +1,9 @@
 import { zeroAddress, parseEther } from "viem";
-import { AAVE, WETH } from "./utils/contracts";
-import { SIGNER, SIGNER_ADDR, sendTransaction } from "./utils/clients";
+import { AAVE, WETH } from "./utils/contracts/aave";
+import { SIGNER } from "./utils/clients/wallet";
+import { sendTransaction } from "./utils/transaction";
+
+const SIGNER_ADDR = SIGNER.account.address;
 
 async function deposit(amount: bigint) {
   const { request } = await AAVE.simulate.depositETH(

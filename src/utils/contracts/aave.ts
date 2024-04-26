@@ -1,6 +1,6 @@
 import { AAVE_ABI, WETH_ABI } from "./abis";
 import { Address, getContract } from "viem";
-import { PUBLIC_CLIENT } from "./clients";
+import { PUBLIC_CLIENT } from "../clients/public";
 
 const AAVE_ADDR = process.env.AAVE as Address;
 const WETH_ADDR = process.env.WETH as Address;

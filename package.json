@@ -7,7 +7,8 @@
     "test": "ts-node ./test.ts",
     "app": "ts-node ./app.ts",
     "dev": "dotenvx run --env-file=.env.development -- yarn app",
-    "start": "dotenvx run --env-file=.env -- yarn app"
+    "start": "dotenvx run --env-file=.env -- yarn app",
+    "uniswap": "dotenvx run --env-file=.env.development -- ts-node ./src/uniswap"
   },
   "keywords": [],
   "author": "",
