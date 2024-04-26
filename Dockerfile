@@ -10,5 +10,5 @@ FROM node:20.12.2-alpine3.19
 WORKDIR /app
 COPY . .
 RUN yarn install
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
 EXPOSE 3000
