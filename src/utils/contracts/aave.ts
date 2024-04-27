@@ -2,6 +2,11 @@ import { AAVE_ABI, WETH_ABI } from "./abis";
 import { Address, getContract } from "viem";
 import { PUBLIC_CLIENT } from "../clients/public";
 
+import * as dotenv from "dotenv";
+dotenv.config({
+  path: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ""}`,
+});
+
 const AAVE_ADDR = process.env.AAVE as Address;
 const WETH_ADDR = process.env.WETH as Address;
 

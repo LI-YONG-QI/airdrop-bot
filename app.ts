@@ -1,6 +1,11 @@
 import { CronJob } from "cron";
 import { aave } from "./src/aave";
 
+import * as dotenv from "dotenv";
+dotenv.config({
+  path: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ""}`,
+});
+
 const config = {
   cronTime: process.env.CRONJOB || "* * * * * *", // At 10:00.
   onTick: async function () {
