@@ -1,5 +1,6 @@
 import { CronJob } from "cron";
 import { aave } from "./src/aave";
+import { SIGNER } from "./src/utils/clients/wallet";
 
 import * as dotenv from "dotenv";
 dotenv.config({
@@ -29,6 +30,7 @@ function main() {
   console.log(`Starting app ...`);
   console.log(`Mode ${process.env.MODE}`);
   console.log(`TIME ${process.env.CRONJOB}`);
+  console.log(`Account ${SIGNER.account.address}`);
   app.start();
 }
 
