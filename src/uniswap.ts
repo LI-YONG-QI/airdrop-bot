@@ -1,35 +1,71 @@
-import { createPublicClient, http } from "viem";
+import { uniswapParams2 } from "./utils/data";
+import {
+  createPublicClient,
+  encodePacked,
+  getContract,
+  http,
+  parseEther,
+} from "viem";
 import { SIGNER } from "./utils/clients/wallet";
-import { UNISWAP_ROUTER } from "./utils/contracts/uniswap";
+import { UNISWAP_ROUTER, UNI_V3_POOl } from "./utils/contracts/uniswap";
 import { sendTransaction } from "./utils/transaction";
 import { base } from "viem/chains";
+import { ERC20_ABI, UNI_V3_POOL_ABI } from "./utils/contracts/abis";
+import { PUBLIC_CLIENT } from "./utils/clients/public";
+import { log } from "console";
+import { UNI_V3_POOL_ADDR } from "./utils/contracts/constants";
+import { get } from "http";
 
-const testClient = createPublicClient({
-  chain: base,
-  transport: http("https://base-rpc.publicnode.com"),
-});
+const params = uniswapParams2;
 
-const uniTest = { ...UNISWAP_ROUTER, client: testClient };
+async function getPrice() {
+  const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
 
-const INPUT = [
-  "0x000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000005af3107a4000",
-  "0x000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000000045aec3c21f8a51600000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b42000000000000000000000000000000000000060001f450c5725949a6f0c72e6c4a641f24049a917db0cb000000000000000000000000000000000000000000",
-  "0x00000000000000000000000050c5725949a6f0c72e6c4a641f24049a917db0cb000000000000000000000000067170777ba8027ced27e034102d54074d062d710000000000000000000000000000000000000000000000000000000000000019",
-  "0x00000000000000000000000050c5725949a6f0c72e6c4a641f24049a917db0cb0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000045aec3c21f8a516",
-] as `0x${string}`[];
+  const logs = await UNI_V3_POOl.getEvents.Swap(undefined, {
+    fromBlock: latestBlockNumber - BigInt(100),
+    toBlock: latestBlockNumber,
+  });
 
-// ETH -> DAI
+  const { args } = logs[logs.length - 1];
+
+  let { amount0, amount1 } = args;
+
+  if (amount0 && amount1) {
+    if (amount0 < BigInt(1)) amount0 = amount0 * BigInt(-1);
+    if (amount1 < BigInt(1)) amount1 = amount1 * BigInt(-1);
+
+    return amount1 / amount0;
+  }
+
+  throw new Error("No price found");
+}
+
 export async function uniswap() {
-  console.log("Swap started !!");
-  const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
+  // console.log("Swap started !!");
 
-  const { request } = await uniTest.simulate.execute(
-    ["0x0b000604", INPUT, deadline],
-    { account: SIGNER.account }
-  );
+  // const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
 
-  console.log("Swap...");
-  await sendTransaction(request, SIGNER);
+  // const { request } = await UNISWAP_ROUTER.simulate.execute(
+  //   [
+  //     params.command as `0x${string}`,
+  //     params.inputs as `0x${string}`[],
+  //     deadline,
+  //   ],
+  //   {
+  //     account: SIGNER.account,
+  //     value: parseEther("0.0001"),
+  //   }
+  // );
+
+  // console.log(request);
+
+  // console.log("Swap...");
+  //await sendTransaction(request, SIGNER);
+
+  const price = await getPrice();
+  console.log(price);
+  const i = encodePacked(["uint256"], [BigInt(1)]);
+  console.log(i);
 }
 
 uniswap();
