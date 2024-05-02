@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "ts-node ./test.ts",
-    "app": "ts-node ./app.ts"
+    "app": "ts-node ./app.ts",
+    "docker:build": "docker build -t bot .",
+    "docker:run": "docker run -it -d --name=airdrop-bot bot",
+    "docker:delete": "docker rm -f airdrop-bot && docker image rm -f bot",
+    "docker:logs": "docker logs -f airdrop-bot",
+    "docker:rebuild": "npm run docker:delete && npm run docker:build && npm run docker:run"
   },
   "keywords": [],
   "author": "",
