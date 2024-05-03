@@ -7,6 +7,7 @@ export async function sendTransaction(request: any, signer: WalletClient) {
     const transaction = await PUBLIC_CLIENT.waitForTransactionReceipt({
       confirmations: 5,
       hash,
+      pollingInterval: 12_000,
     });
 
     console.log(
