@@ -1,22 +1,9 @@
-import { uniswapParams2 } from "./utils/data";
-import {
-  createPublicClient,
-  encodePacked,
-  getContract,
-  http,
-  parseEther,
-} from "viem";
+import { UniswapParams } from "./utils/data";
+import { parseEther } from "viem";
 import { SIGNER } from "./utils/clients/wallet";
 import { UNISWAP_ROUTER, UNI_V3_POOl } from "./utils/contracts/uniswap";
 import { sendTransaction } from "./utils/transaction";
-import { base } from "viem/chains";
-import { ERC20_ABI, UNI_V3_POOL_ABI } from "./utils/contracts/abis";
 import { PUBLIC_CLIENT } from "./utils/clients/public";
-import { log } from "console";
-import { UNI_V3_POOL_ADDR } from "./utils/contracts/constants";
-import { get } from "http";
-
-const params = uniswapParams2;
 
 async function getPrice() {
   const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
@@ -41,31 +28,21 @@ async function getPrice() {
 }
 
 export async function uniswap() {
-  // console.log("Swap started !!");
+  const price = await getPrice();
+  const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
+  const t = new UniswapParams(price, parseEther("0.0001"));
 
-  // const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
-
-  // const { request } = await UNISWAP_ROUTER.simulate.execute(
-  //   [
-  //     params.command as `0x${string}`,
-  //     params.inputs as `0x${string}`[],
-  //     deadline,
-  //   ],
-  //   {
-  //     account: SIGNER.account,
-  //     value: parseEther("0.0001"),
-  //   }
-  // );
-
+  const { request } = await UNISWAP_ROUTER.simulate.execute(
+    [t.command, t.formatInputs(), deadline],
+    {
+      account: SIGNER.account,
+      value: parseEther("0.0001"),
+    }
+  );
   // console.log(request);
 
   // console.log("Swap...");
   //await sendTransaction(request, SIGNER);
-
-  const price = await getPrice();
-  console.log(price);
-  const i = encodePacked(["uint256"], [BigInt(1)]);
-  console.log(i);
 }
 
 uniswap();
