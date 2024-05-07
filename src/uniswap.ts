@@ -1,33 +1,46 @@
-import { createPublicClient, http } from "viem";
+import { UniswapParams } from "./utils/data";
+import { parseEther } from "viem";
 import { SIGNER } from "./utils/clients/wallet";
-import { UNISWAP_ROUTER } from "./utils/contracts/uniswap";
+import { UNISWAP_ROUTER, UNI_V3_POOl } from "./utils/contracts/uniswap";
 import { sendTransaction } from "./utils/transaction";
-import { base } from "viem/chains";
+import { PUBLIC_CLIENT } from "./utils/clients/public";
 
-const testClient = createPublicClient({
-  chain: base,
-  transport: http("https://base-rpc.publicnode.com"),
-});
+async function getPrice() {
+  const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
 
-const uniTest = { ...UNISWAP_ROUTER, client: testClient };
+  const logs = await UNI_V3_POOl.getEvents.Swap(undefined, {
+    fromBlock: latestBlockNumber - BigInt(100),
+    toBlock: latestBlockNumber,
+  });
 
-const INPUT = [
-  "0x000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000005af3107a4000",
-  "0x000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000000045aec3c21f8a51600000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b42000000000000000000000000000000000000060001f450c5725949a6f0c72e6c4a641f24049a917db0cb000000000000000000000000000000000000000000",
-  "0x00000000000000000000000050c5725949a6f0c72e6c4a641f24049a917db0cb000000000000000000000000067170777ba8027ced27e034102d54074d062d710000000000000000000000000000000000000000000000000000000000000019",
-  "0x00000000000000000000000050c5725949a6f0c72e6c4a641f24049a917db0cb0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000045aec3c21f8a516",
-] as `0x${string}`[];
+  const { args } = logs[logs.length - 1];
 
-// ETH -> DAI
+  let { amount0, amount1 } = args;
+
+  if (amount0 && amount1) {
+    if (amount0 < BigInt(1)) amount0 = amount0 * BigInt(-1);
+    if (amount1 < BigInt(1)) amount1 = amount1 * BigInt(-1);
+
+    return amount1 / amount0;
+  }
+
+  throw new Error("No price found");
+}
+
 export async function uniswap() {
-  console.log("Swap started !!");
+  const price = await getPrice();
   const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
+  const t = new UniswapParams(price, parseEther("0.0001"));
 
-  const { request } = await uniTest.simulate.execute(
-    ["0x0b000604", INPUT, deadline],
-    { account: SIGNER.account }
+  const { request } = await UNISWAP_ROUTER.simulate.execute(
+    [t.command, t.formatInputs(), deadline],
+    {
+      account: SIGNER.account,
+      value: parseEther("0.0001"),
+    }
   );
 
+  console.log(request);
   console.log("Swap...");
   await sendTransaction(request, SIGNER);
 }
