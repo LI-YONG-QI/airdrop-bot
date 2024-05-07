@@ -1,6 +1,11 @@
-import { Address, encodeAbiParameters, toHex } from "viem";
+import { Address, Hex, encodeAbiParameters, toHex } from "viem";
 
-const INPUT_ABI: { [key: string]: { name: string; type: string }[] } = {
+interface ABI {
+  name: string;
+  type: string;
+}
+
+const INPUT_ABI: { [key: string]: ABI[] } = {
   warp: [
     { name: "receipt", type: "address" },
     { name: "amount", type: "uint256" },
@@ -25,14 +30,14 @@ const INPUT_ABI: { [key: string]: { name: string; type: string }[] } = {
 };
 
 class Input {
-  warp: `0x${string}`;
-  swap: `0x${string}`;
-  payportion: `0x${string}`;
-  sweep: `0x${string}`;
+  warp: Hex;
+  swap: Hex;
+  payportion: Hex;
+  sweep: Hex;
 }
 
 export class UniswapParams {
-  public command: `0x${string}` = "0x0b000604";
+  public command: Hex = "0x0b000604";
 
   public DAI: Address = "0x50c5725949a6f0c72e6c4a641f24049a917db0cb";
   inputs = new Input();
@@ -55,9 +60,8 @@ export class UniswapParams {
     ]);
   }
 
-  //TODO optimize this
   formatInputs() {
-    const formatInputs: `0x${string}`[] = [];
+    const formatInputs: Hex[] = [];
 
     formatInputs.push(this.inputs.warp);
     formatInputs.push(this.inputs.swap);
@@ -84,7 +88,7 @@ export class UniswapParams {
 
     inputBytes += parsePath;
 
-    return inputBytes as `0x${string}`;
+    return inputBytes as Hex;
   }
 
   private getPath() {
@@ -95,7 +99,7 @@ export class UniswapParams {
     ];
   }
 
-  toReceipt(index: number): Address {
+  toReceipt(index: number): Hex {
     return toHex(index, { size: 20 });
   }
 }

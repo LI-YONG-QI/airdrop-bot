@@ -39,10 +39,10 @@ export async function uniswap() {
       value: parseEther("0.0001"),
     }
   );
-  // console.log(request);
 
-  // console.log("Swap...");
-  //await sendTransaction(request, SIGNER);
+  console.log(request);
+  console.log("Swap...");
+  await sendTransaction(request, SIGNER);
 }
 
 uniswap();
