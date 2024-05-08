@@ -1,7 +1,11 @@
 import { Address, getContract } from "viem";
-import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "./abis";
-import { PUBLIC_CLIENT } from "../clients/public";
-import { UNISWAP_ROUTER_ADDR, UNI_V3_POOL_ADDR } from "./constants";
+
+import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "@/utils/contracts/abis";
+import { PUBLIC_CLIENT } from "@/utils/clients/public";
+import {
+  UNISWAP_ROUTER_ADDR,
+  UNI_V3_POOL_ADDR,
+} from "@/utils/contracts/constants";
 
 import * as dotenv from "dotenv";
 dotenv.config({

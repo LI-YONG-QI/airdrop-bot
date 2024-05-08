@@ -1,9 +1,10 @@
-import { UniswapParams } from "./utils/data";
 import { parseEther } from "viem";
-import { SIGNER } from "./utils/clients/wallet";
-import { UNISWAP_ROUTER, UNI_V3_POOl } from "./utils/contracts/uniswap";
-import { sendTransaction } from "./utils/transaction";
-import { PUBLIC_CLIENT } from "./utils/clients/public";
+
+import { sendTransaction } from "@/libs/transaction";
+import { UniswapParams } from "@/utils/contracts/uniswap/params";
+import { SIGNER } from "@/utils/clients/wallet";
+import { UNISWAP_ROUTER, UNI_V3_POOl } from "@/utils/contracts/uniswap";
+import { PUBLIC_CLIENT } from "@/utils/clients/public";
 
 async function getPrice() {
   const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
@@ -44,5 +45,3 @@ export async function uniswap() {
   console.log("Swap...");
   await sendTransaction(request, SIGNER);
 }
-
-uniswap();

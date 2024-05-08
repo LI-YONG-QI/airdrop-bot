@@ -11,7 +11,6 @@ export function getTime() {
 
   return formatStakeTime;
 }
-
 export async function randomDelay() {
   const MINUTES = 60; // 60 seconds
   const LIMIT = Number(process.env.DELAY) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
@@ -21,8 +20,7 @@ export async function randomDelay() {
 
   await delay(rand * 1000);
 }
-
-async function delay(ms: number) {
+export async function delay(ms: number) {
   return new Promise(function (resolve) {
     setTimeout(resolve, ms);
   });

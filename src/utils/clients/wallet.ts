@@ -1,6 +1,6 @@
 import { Address, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { CONFIG } from "./config";
+import { CONFIG } from "@/utils/clients/config";
 
 import * as dotenv from "dotenv";
 dotenv.config({

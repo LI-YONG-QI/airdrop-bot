@@ -1,7 +1,8 @@
 import { zeroAddress, parseEther } from "viem";
-import { AAVE, WETH } from "./utils/contracts/aave";
-import { SIGNER } from "./utils/clients/wallet";
-import { sendTransaction } from "./utils/transaction";
+
+import { sendTransaction } from "@/libs/transaction";
+import { AAVE, WETH } from "@/utils/contracts/aave";
+import { SIGNER } from "@/utils/clients/wallet";
 
 const SIGNER_ADDR = SIGNER.account.address;
 

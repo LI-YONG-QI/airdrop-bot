@@ -1,9 +1,11 @@
 import { CronJob } from "cron";
-import { aave } from "./src/aave";
-import { SIGNER } from "./src/utils/clients/wallet";
-
 import * as dotenv from "dotenv";
-import { getTime, randomDelay } from "./src/utils/time";
+
+import { randomDelay } from "@/libs/time";
+import { getTime } from "@/libs/time";
+import { SIGNER } from "@/utils/clients/wallet";
+import { uniswap } from "@/utils/uniswap";
+
 dotenv.config({
   path: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ""}`,
 });
@@ -13,7 +15,7 @@ const config = {
   onTick: async function () {
     console.log("Start new round");
     await randomDelay();
-    await aave();
+    await uniswap();
     console.log(`End time ${getTime()}`);
     console.log("=============================");
   },

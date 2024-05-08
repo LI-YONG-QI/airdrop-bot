@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "ts-node ./test.ts",
-    "app": "ts-node ./app.ts",
+    "aave": "ts-node ./src/apps/aave.ts",
     "docker:build": "docker build -t bot .",
     "docker:run": "docker run -it -d --name=airdrop-bot bot",
     "docker:delete": "docker rm -f airdrop-bot && docker image rm -f bot",
@@ -23,5 +23,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "viem": "^2.9.22"
+  },
+  "devDependencies": {
+    "tsconfig-paths": "^4.2.0"
   }
 }
