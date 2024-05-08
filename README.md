@@ -6,6 +6,8 @@ This is a script for automatic interaction with the onchain protocol by setting 
 
 1. Base AAVE
    - deposit 0.001 ETH -> approve -> withdraw
+2. Base Uniswap
+   - swap DAI <-> 0.0001 ETH
 
 # How to start ?
 
