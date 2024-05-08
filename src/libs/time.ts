@@ -1,8 +1,3 @@
-import * as dotenv from "dotenv";
-dotenv.config({
-  path: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ""}`,
-});
-
 export function getTime() {
   const date = new Date(Date.now());
   const formatStakeTime = date.toLocaleString("zh-TW", {
@@ -11,9 +6,10 @@ export function getTime() {
 
   return formatStakeTime;
 }
-export async function randomDelay() {
+
+export async function randomDelay(delay_: number = 0) {
   const MINUTES = 60; // 60 seconds
-  const LIMIT = Number(process.env.DELAY) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
+  const LIMIT = Number(delay_) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
 
   const rand = Math.floor(Math.random() * LIMIT);
   console.log(`Start time: ${getTime()} | Delay ${rand} seconds`);

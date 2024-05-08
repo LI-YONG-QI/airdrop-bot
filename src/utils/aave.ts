@@ -1,44 +1,53 @@
-import { zeroAddress, parseEther } from "viem";
+import {
+  zeroAddress,
+  WalletClient,
+  PrivateKeyAccount,
+  Transport,
+  Chain,
+} from "viem";
 
 import { sendTransaction } from "@/libs/transaction";
 import { AAVE, WETH } from "@/utils/contracts/aave";
-import { SIGNER } from "@/utils/clients/wallet";
+import { Interaction } from "@/types/protocol";
 
-const SIGNER_ADDR = SIGNER.account.address;
+async function deposit(
+  signer: WalletClient<Transport, Chain, PrivateKeyAccount>,
+  amount: bigint
+) {
+  const { account } = signer;
 
-async function deposit(amount: bigint) {
   const { request } = await AAVE.simulate.depositETH(
-    [zeroAddress, SIGNER_ADDR, 0],
+    [zeroAddress, account.address, 0],
     {
       value: amount,
-      account: SIGNER.account,
+      account,
     }
   );
   console.log("Deposit...");
-  await sendTransaction(request, SIGNER);
+  await sendTransaction(request, signer);
 }
 
-async function withdraw(amount: bigint) {
+async function withdraw(
+  signer: WalletClient<Transport, Chain, PrivateKeyAccount>,
+  amount: bigint
+) {
+  const { account } = signer;
   const { request: approveReq } = await WETH.simulate.approve(
     [AAVE.address, amount],
-    { account: SIGNER.account }
+    { account: account }
   );
   console.log("Approving...");
-  await sendTransaction(approveReq, SIGNER);
+  await sendTransaction(approveReq, signer);
 
   const { request: withdrawReq } = await AAVE.simulate.withdrawETH(
-    [zeroAddress, amount, SIGNER_ADDR],
-    { account: SIGNER.account }
+    [zeroAddress, amount, account.address],
+    { account: account }
   );
   console.log("Withdraw...");
-  await sendTransaction(withdrawReq, SIGNER);
+  await sendTransaction(withdrawReq, signer);
 }
 
-export async function aave() {
-  const AMOUNT = parseEther("0.001");
-
-  await deposit(AMOUNT);
-  await withdraw(AMOUNT);
-
-  console.log("Contract address", AAVE.address);
-}
+export const aave: Interaction = async (_signer, amount) => {
+  await deposit(_signer, amount);
+  await withdraw(_signer, amount);
+};

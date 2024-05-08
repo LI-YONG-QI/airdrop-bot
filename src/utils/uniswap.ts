@@ -1,10 +1,8 @@
-import { parseEther } from "viem";
-
 import { sendTransaction } from "@/libs/transaction";
 import { UniswapParams } from "@/utils/contracts/uniswap/params";
-import { SIGNER } from "@/utils/clients/wallet";
 import { UNISWAP_ROUTER, UNI_V3_POOl } from "@/utils/contracts/uniswap";
 import { PUBLIC_CLIENT } from "@/utils/clients/public";
+import { Interaction } from "@/types/protocol";
 
 async function getPrice() {
   const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
@@ -28,20 +26,19 @@ async function getPrice() {
   throw new Error("No price found");
 }
 
-export async function uniswap() {
+export const uniswap: Interaction = async (_signer, amount) => {
   const price = await getPrice();
   const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
-  const t = new UniswapParams(price, parseEther("0.0001"));
+  const params = new UniswapParams(price, amount);
 
   const { request } = await UNISWAP_ROUTER.simulate.execute(
-    [t.command, t.formatInputs(), deadline],
+    [params.command, params.formatInputs(), deadline],
     {
-      account: SIGNER.account,
-      value: parseEther("0.0001"),
+      account: _signer.account,
+      value: amount,
     }
   );
 
-  console.log(request);
   console.log("Swap...");
-  await sendTransaction(request, SIGNER);
-}
+  await sendTransaction(request, _signer);
+};
