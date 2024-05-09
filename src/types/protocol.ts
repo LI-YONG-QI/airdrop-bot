@@ -29,7 +29,7 @@ export class Protocol {
     public delay: number = 0
   ) {
     const _signer = this.setSigner(privateKey);
-    const _interaction = interaction.bind(null, _signer, 100n);
+    const _interaction = interaction.bind(null, _signer, amount);
 
     const config = createConfig(_interaction, cronTime, delay);
 
@@ -60,6 +60,7 @@ export class Protocol {
       account,
       ...CONFIG,
     });
+
     this.signer = _signer;
 
     return _signer;
