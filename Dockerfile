@@ -11,5 +11,4 @@ WORKDIR /app
 COPY . .
 RUN yarn install
 RUN export NODE_ENV=""
-CMD ["npm", "run", "app"]
 EXPOSE 3000
