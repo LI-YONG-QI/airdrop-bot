@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "uniswap": "ts-node ./src/apps/uniswap.ts",
-    "aave": "ts-node ./src/apps/aave.ts",
+    "bot": "ts-node ./src",
     "docker:build": "docker build -t bot .",
     "docker:run": "docker run -it -d --name=airdrop-bot bot",
     "docker:delete": "docker rm -f airdrop-bot && docker image rm -f bot",
