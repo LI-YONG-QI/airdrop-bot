@@ -37,8 +37,11 @@ echo $PK
 ```
 
 ```bash
-airdrop-bot aave -p $PK --delay 10 --amount 0.01
+# execute AAVE
+airdrop-bot aave -c "0 */10 * * * *" -p $PK --delay 10 --amount 0.01
 ```
+
+Notice: cron job expression is from **second** not minute
 
 ---
 
@@ -49,8 +52,7 @@ If successfully started, the following information should appear.
 > ts-node ./app.ts
 
 Starting app ...
-Mode <$MODE>
-Time <$CRONJOB> | Delay <$DELAY> minutes
+Time 0 */10 * * * * | Delay 10 minutes
 Account <Public address from $PK>
 ```
 

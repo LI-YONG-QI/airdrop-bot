@@ -19,7 +19,6 @@ class Protocol {
     execute() {
         var _a;
         console.log(`Starting app ...`);
-        console.log(`Mode ${process.env.MODE}`);
         console.log(`Time ${this.cronTime} | Delay ${this.delay} minutes`);
         console.log(`Account ${(_a = this.signer.account) === null || _a === void 0 ? void 0 : _a.address}`);
         this.cron.start();
