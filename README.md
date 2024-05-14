@@ -5,55 +5,39 @@ This is a script for automatic interaction with the onchain protocol by setting 
 # Supported protocols
 
 1. Base AAVE
-   - deposit 0.001 ETH -> approve -> withdraw
+   - Deposit ETH -> approve -> withdraw
 2. Base Uniswap
-   - swap DAI <-> 0.0001 ETH
+   - Swap DAI <-> ETH
 
-# How to start ?
+# Getting started
 
-Two options for starting the bot
-
-1. Node.js
-2. Docker
-
-## Prerequisites
-
-Create `.env` file with `.env.example`
-
-You can change default value of variables in `.env.example` to `.env` if you need
-
-## Docker
-
-1. Build image
+1. Install CLI globally
 
 ```bash
-npm run docker:build
+npm install -g airdrop-bot
 ```
 
-2. Run container
+2. Check version
 
 ```bash
-npm run docker:run
+airdrop-bot -v
+# 0.0.1
 ```
 
-3. Check docker logs
+3. Interact protocols (AAVE / Uniswap)
+
+For example, interact aave by 0.01 ETH and setup delay 10 minutes
 
 ```bash
-npm run docker:logs
+# set your private key to environment variables
+export PK=<your-private-key>
+
+# check private key
+echo $PK
 ```
 
-## Node.js
-
-1. Install packages
-
 ```bash
-yarn
-```
-
-2. Run app
-
-```bash
-npm run app
+airdrop-bot aave -p $PK --delay 10 --amount 0.01
 ```
 
 ---
@@ -72,8 +56,8 @@ Account <Public address from $PK>
 
 Print below information when starting a new round
 
-- Trigger start/end time (yime zone: Asia/Taipei)
-- Random delay seconds (limit base on `$DELAY` variable in `.env`)
+- Trigger start / end time (time zone: Asia/Taipei)
+- Random delay seconds (limit base on `--delay` command option)
 - Each txs hash and status (retry sent tx if status is `reverted`)
 
 ```bash

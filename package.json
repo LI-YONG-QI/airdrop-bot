@@ -1,32 +1,36 @@
 {
-  "name": "base-bot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "airdrop-bot",
+  "version": "0.0.1",
+  "description": "This is a simple airdrop bot that can be used to interact onchain protocols",
+  "main": "dist/index.js",
+  "bin": {
+    "airdrop-bot": "./dist/index.js"
+  },
   "scripts": {
     "bot": "ts-node ./src",
-    "docker:build": "docker build -t bot .",
-    "docker:run": "docker run -it -d --name=airdrop-bot bot",
-    "docker:delete": "docker rm -f airdrop-bot && docker image rm -f bot",
-    "docker:logs": "docker logs -f airdrop-bot",
-    "docker:rebuild": "npm run docker:delete && npm run docker:build && npm run docker:run"
+    "build": "npx tsc"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "cli",
+    "blockchain",
+    "bot",
+    "airdrop"
+  ],
+  "author": "LI-YONG-QI",
   "license": "ISC",
   "dependencies": {
-    "@types/commander": "^2.12.2",
-    "@types/figlet": "^1.5.8",
-    "@types/node": "^20.12.7",
     "commander": "^12.0.0",
     "cron": "^3.1.7",
     "dotenv": "^16.4.5",
     "figlet": "^1.7.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
     "viem": "^2.9.22"
   },
   "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/figlet": "^1.5.8",
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
     "tsconfig-paths": "^4.2.0"
   }
 }

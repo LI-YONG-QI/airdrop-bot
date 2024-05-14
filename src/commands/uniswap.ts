@@ -1,8 +1,8 @@
 import { parseEther } from "viem";
 import { Command } from "commander";
 
-import { Protocol } from "@/types/protocol";
-import { uniswap as uniswapFn } from "@/utils/uniswap";
+import { Protocol } from "../types/protocol";
+import { uniswap as uniswapFn } from "../utils/uniswap";
 
 export const uniswap = new Command("uniswap");
 

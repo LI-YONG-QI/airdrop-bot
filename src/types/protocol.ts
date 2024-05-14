@@ -9,8 +9,8 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-import { createConfig } from "@/libs/cron";
-import { CONFIG } from "@/utils/clients/config";
+import { createConfig } from "../libs/cron";
+import { CONFIG } from "../utils/clients/config";
 
 export type Interaction = (
   _signer: WalletClient<Transport, Chain, PrivateKeyAccount>,

@@ -6,9 +6,9 @@ import {
   Chain,
 } from "viem";
 
-import { sendTransaction } from "@/libs/transaction";
-import { AAVE, WETH } from "@/utils/contracts/aave";
-import { Interaction } from "@/types/protocol";
+import { sendTransaction } from "../libs/transaction";
+import { AAVE, WETH } from "./contracts/aave";
+import { Interaction } from "../types/protocol";
 
 async function deposit(
   signer: WalletClient<Transport, Chain, PrivateKeyAccount>,

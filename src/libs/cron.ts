@@ -1,4 +1,4 @@
-import { getTime, randomDelay } from "@/libs/time";
+import { getTime, randomDelay } from "./time";
 
 export function createConfig(
   interaction: () => Promise<void>,

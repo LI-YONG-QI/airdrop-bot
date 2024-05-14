@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import { textSync } from "figlet";
 
-import { aave } from "@/commands/aave";
-import { uniswap } from "@/commands/uniswap";
+import { aave } from "./commands/aave";
+import { uniswap } from "./commands/uniswap";
 
 console.log(textSync("BOT"));
 

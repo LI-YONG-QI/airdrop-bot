@@ -1,8 +1,8 @@
 import { parseEther } from "viem";
 import { Command } from "commander";
 
-import { Protocol } from "@/types/protocol";
-import { aave as aaveFn } from "@/utils/aave";
+import { Protocol } from "../types/protocol";
+import { aave as aaveFn } from "../utils/aave";
 
 export const aave = new Command("aave");
 
