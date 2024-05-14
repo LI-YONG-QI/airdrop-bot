@@ -18,10 +18,10 @@ function getTime() {
     return formatStakeTime;
 }
 exports.getTime = getTime;
-function randomDelay() {
-    return __awaiter(this, arguments, void 0, function* (delay_ = 0) {
+function randomDelay(limit) {
+    return __awaiter(this, void 0, void 0, function* () {
         const MINUTES = 60; // 60 seconds
-        const LIMIT = Number(delay_) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
+        const LIMIT = Number(limit) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
         const rand = Math.floor(Math.random() * LIMIT);
         console.log(`Start time: ${getTime()} | Delay ${rand} seconds`);
         yield delay(rand * 1000);
@@ -36,3 +36,4 @@ function delay(ms) {
     });
 }
 exports.delay = delay;
+// -c "*/5 * * * * *" -d 0 -p $PK --amount 0.01

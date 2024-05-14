@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createConfig = void 0;
+exports.parseCronJob = exports.createConfig = void 0;
 const time_1 = require("./time");
 function createConfig(interaction, cronTime, delay) {
     return {
@@ -28,3 +28,13 @@ function createConfig(interaction, cronTime, delay) {
     };
 }
 exports.createConfig = createConfig;
+function parseCronJob(cronJob) {
+    const parseResult = cronJob.map((job) => {
+        if (job.includes('"')) {
+            return job.replace('"', "");
+        }
+        return job;
+    });
+    return parseResult.join(" ");
+}
+exports.parseCronJob = parseCronJob;

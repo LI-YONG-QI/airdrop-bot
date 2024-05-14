@@ -7,9 +7,9 @@ export function getTime() {
   return formatStakeTime;
 }
 
-export async function randomDelay(delay_: number = 0) {
+export async function randomDelay(limit: number) {
   const MINUTES = 60; // 60 seconds
-  const LIMIT = Number(delay_) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
+  const LIMIT = Number(limit) * MINUTES; // 最多不超過延遲 $DELAY 分鐘
 
   const rand = Math.floor(Math.random() * LIMIT);
   console.log(`Start time: ${getTime()} | Delay ${rand} seconds`);
@@ -21,3 +21,5 @@ export async function delay(ms: number) {
     setTimeout(resolve, ms);
   });
 }
+
+// -c "*/5 * * * * *" -d 0 -p $PK --amount 0.01

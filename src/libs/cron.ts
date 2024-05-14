@@ -20,3 +20,14 @@ export function createConfig(
     timeZone: "Asia/Taipei",
   };
 }
+
+export function parseCronJob(cronJob: string[]) {
+  const parseResult = cronJob.map((job) => {
+    if (job.includes('"')) {
+      return job.replace('"', "");
+    }
+    return job;
+  });
+
+  return parseResult.join(" ");
+}
