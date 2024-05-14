@@ -50,7 +50,7 @@ export class UniswapParams {
     this.inputs.payportion = this.getParams("payportion", [
       this.DAI,
       "0x067170777ba8027ced27e034102d54074d062d71",
-      25n,
+      BigInt(25),
     ]);
 
     this.inputs.sweep = this.getParams("sweep", [
@@ -80,7 +80,7 @@ export class UniswapParams {
       this.toReceipt(2),
       this.amount,
       this.amountMin,
-      160n,
+      BigInt(160),
       false,
     ]);
 

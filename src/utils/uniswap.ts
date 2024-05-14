@@ -1,8 +1,8 @@
-import { sendTransaction } from "@/libs/transaction";
-import { UniswapParams } from "@/utils/contracts/uniswap/params";
-import { UNISWAP_ROUTER, UNI_V3_POOl } from "@/utils/contracts/uniswap";
-import { PUBLIC_CLIENT } from "@/utils/clients/public";
-import { Interaction } from "@/types/protocol";
+import { sendTransaction } from "../libs/transaction";
+import { UniswapParams } from "./contracts/uniswap/params";
+import { UNISWAP_ROUTER, UNI_V3_POOl } from "./contracts/uniswap";
+import { PUBLIC_CLIENT } from "./clients/public";
+import { Interaction } from "../types/protocol";
 
 async function getPrice() {
   const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
@@ -29,7 +29,7 @@ async function getPrice() {
 export const uniswap: Interaction = async (_signer, amount) => {
   const price = await getPrice();
   const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
-  const params = new UniswapParams(price, amount);
+  const params = new UniswapParams(BigInt(price), amount);
 
   const { request } = await UNISWAP_ROUTER.simulate.execute(
     [params.command, params.formatInputs(), deadline],

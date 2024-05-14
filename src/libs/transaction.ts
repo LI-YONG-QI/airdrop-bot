@@ -1,4 +1,4 @@
-import { PUBLIC_CLIENT } from "@/utils/clients/public";
+import { PUBLIC_CLIENT } from "../utils/clients/public";
 import { WalletClient } from "viem";
 
 export async function sendTransaction(request: any, signer: WalletClient) {

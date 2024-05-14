@@ -9,8 +9,8 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-import { createConfig } from "@/libs/cron";
-import { CONFIG } from "@/utils/clients/config";
+import { createConfig } from "../libs/cron";
+import { CONFIG } from "../utils/clients/config";
 
 export type Interaction = (
   _signer: WalletClient<Transport, Chain, PrivateKeyAccount>,
@@ -44,7 +44,6 @@ export class Protocol {
 
   execute() {
     console.log(`Starting app ...`);
-    console.log(`Mode ${process.env.MODE}`);
     console.log(`Time ${this.cronTime} | Delay ${this.delay} minutes`);
     console.log(`Account ${this.signer.account?.address}`);
     this.cron.start();
