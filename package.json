@@ -1,11 +1,13 @@
 {
   "name": "airdrop-bot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This is a simple airdrop bot that can be used to interact onchain protocols",
   "main": "dist/index.js",
   "bin": {
     "airdrop-bot": "./dist/index.js"
   },
+  "repository": "https://github.com/LI-YONG-QI/airdrop-bot",
+  "homepage": "https://github.com/LI-YONG-QI/airdrop-bot",
   "scripts": {
     "bot": "ts-node ./src",
     "build": "npx tsc"
