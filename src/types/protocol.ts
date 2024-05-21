@@ -1,38 +1,68 @@
 import { CronJob } from "cron";
 import {
-  Chain,
   Hex,
   PrivateKeyAccount,
   Transport,
+  Chain as viemChain,
   WalletClient,
   createWalletClient,
+  ClientConfig,
+  http,
+  PublicClientConfig,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { base, sepolia } from "viem/chains";
 
-import { createConfig } from "../libs/cron";
-import { CONFIG } from "../utils/clients/config";
+import { createCronConfig } from "../libs/cron";
 
 export type Interaction = (
-  _signer: WalletClient<Transport, Chain, PrivateKeyAccount>,
+  config: PublicClientConfig<Transport, viemChain>,
+  signer: WalletClient<Transport, viemChain, PrivateKeyAccount>,
   amount: bigint
 ) => Promise<void>;
 
+type Chain = "base" | "sepolia";
+
+function createInteraction(
+  main: Interaction,
+  clientConfig: ClientConfig,
+  _signer: WalletClient<Transport, viemChain, PrivateKeyAccount>,
+  _amount: bigint
+): () => Promise<void> {
+  return main.bind(null, clientConfig, _signer, _amount);
+}
+
+function createClientConfig(chain: Chain): ClientConfig<Transport, viemChain> {
+  const _chain = chain === "base" ? base : sepolia;
+  return {
+    chain: _chain,
+    transport: http(),
+  };
+}
+
 export class Protocol {
   public cron: CronJob;
+  public clientConfig: ClientConfig;
   private signer: WalletClient;
 
   constructor(
-    interaction: Interaction,
     privateKey: Hex,
+    chain: Chain,
+    interaction: Interaction,
     public amount: bigint,
-    public cronTime: string = "* * * * * *",
+    public cronTime: string,
     public delay: number = 0
   ) {
-    const _signer = this.setSigner(privateKey);
-    const _interaction = interaction.bind(null, _signer, amount);
+    const _clientConfig = this.setClientConfig(chain);
+    const _signer = this.setSigner(_clientConfig, privateKey);
+    const _interaction = createInteraction(
+      interaction,
+      _clientConfig,
+      _signer,
+      amount
+    );
 
-    const config = createConfig(_interaction, cronTime, delay);
-
+    const config = createCronConfig(_interaction, cronTime, delay);
     this.cron = new CronJob(
       config.cronTime,
       config.onTick,
@@ -53,15 +83,24 @@ export class Protocol {
     return this.signer;
   }
 
-  private setSigner(privateKey: Hex) {
+  private setSigner(
+    config: ClientConfig<Transport, viemChain>,
+    privateKey: Hex
+  ) {
     const account = privateKeyToAccount(privateKey);
-    const _signer = createWalletClient({
-      account,
-      ...CONFIG,
-    });
+    const _signer = createWalletClient<Transport, viemChain, PrivateKeyAccount>(
+      {
+        account,
+        ...config,
+      }
+    );
 
     this.signer = _signer;
-
     return _signer;
+  }
+
+  private setClientConfig(chain: Chain) {
+    const config = createClientConfig(chain);
+    return config;
   }
 }

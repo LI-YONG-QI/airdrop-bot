@@ -15,15 +15,15 @@ uniswap
   .option(
     "-c, --cronjob <cron job...>",
     'cron job expression (every five seconds i.e. "*/5 * * * *")'
-  )
-  .action((options) => {
-    const uniswapProtocol = new Protocol(
-      uniswapFn,
-      options.pk,
-      parseEther(options.amount),
-      parseCronJob(options.cronjob),
-      Number(options.delay)
-    );
+  );
+// .action((options) => {
+//   const uniswapProtocol = new Protocol(
+//     uniswapFn,
+//     options.pk,
+//     parseEther(options.amount),
+//     parseCronJob(options.cronjob),
+//     Number(options.delay)
+//   );
 
-    uniswapProtocol.execute();
-  });
+//   uniswapProtocol.execute();
+// });
