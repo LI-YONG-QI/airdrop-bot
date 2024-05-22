@@ -41,6 +41,8 @@ echo $PK
 airdrop-bot aave -c "0 */10 * * * *" -p $PK --delay 10 --amount 0.01
 ```
 
+- -p (--pk) & --amount is required
+
 Notice: cron job expression is from **second** not minute
 
 ---
@@ -51,7 +53,14 @@ If successfully started, the following information should appear.
 > base-bot@1.0.0 app
 > ts-node ./app.ts
 
+  ____   ___ _____
+ | __ ) / _ \_   _|
+ |  _ \| | | || |
+ | |_) | |_| || |
+ |____/ \___/ |_|
+
 Starting app ...
+Chain Base
 Time 0 */10 * * * * | Delay 10 minutes
 Account <Public address from $PK>
 ```
