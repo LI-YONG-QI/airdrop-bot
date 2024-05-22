@@ -45,9 +45,9 @@ const withdraw: AAVEFn = async (contracts, signer, amount) => {
 
 const getAaveAddress = (chain: string): Address => {
   switch (chain) {
-    case "base":
+    case "Base":
       return "0x8be473dCfA93132658821E67CbEB684ec8Ea2E74";
-    case "sepolia":
+    case "Sepolia":
       return "0x387d311e47e80b498169e6fb51d3193167d89F7D";
   }
 
@@ -56,9 +56,9 @@ const getAaveAddress = (chain: string): Address => {
 
 const getWethAddress = (chain: string): Address => {
   switch (chain) {
-    case "base":
+    case "Base":
       return "0xD4a0e0b9149BCee3C920d2E00b5dE09138fd8bb7";
-    case "sepolia":
+    case "Sepolia":
       return "0x5b071b590a59395fE4025A0Ccc1FcC931AAc1830";
   }
 

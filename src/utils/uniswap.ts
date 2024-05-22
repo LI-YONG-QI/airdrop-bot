@@ -17,7 +17,7 @@ function getUniswapContractAddress(chain: string): {
   pool: Address;
 } {
   switch (chain) {
-    case "base":
+    case "Base":
       return {
         router: "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD",
         pool: "0x93e8542E6CA0eFFfb9D57a270b76712b968A38f5",

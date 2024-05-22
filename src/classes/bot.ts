@@ -38,6 +38,7 @@ export class Bot {
 
   execute() {
     console.log(`Starting app ...`);
+    console.log(`Chain ${this.protocol.publicClient.chain?.name}`);
     console.log(`Time ${this.cronTime} | Delay ${this.delay} minutes`);
     console.log(`Account ${this.protocol.signer.account?.address}`);
     this.cron.start();
