@@ -1,6 +1,6 @@
 {
   "name": "airdrop-bot",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "This is a simple airdrop bot that can be used to interact onchain protocols",
   "main": "dist/index.js",
   "bin": {
@@ -23,7 +23,6 @@
   "dependencies": {
     "commander": "^12.0.0",
     "cron": "^3.1.7",
-    "dotenv": "^16.4.5",
     "figlet": "^1.7.0",
     "viem": "^2.9.22"
   },
@@ -32,7 +31,6 @@
     "@types/figlet": "^1.5.8",
     "@types/node": "^20.12.7",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "tsconfig-paths": "^4.2.0"
+    "typescript": "^5.4.5"
   }
 }

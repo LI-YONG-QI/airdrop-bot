@@ -38,8 +38,8 @@ class Input {
 
 export class UniswapParams {
   public command: Hex = "0x0b000604";
-
   public DAI: Address = "0x50c5725949a6f0c72e6c4a641f24049a917db0cb";
+
   inputs = new Input();
 
   constructor(public amountMin: bigint, public amount: bigint) {

@@ -1,10 +1,13 @@
-import { PUBLIC_CLIENT } from "../utils/clients/public";
-import { WalletClient } from "viem";
+import { PublicClient, WalletClient } from "viem";
 
-export async function sendTransaction(request: any, signer: WalletClient) {
+export async function sendTransaction(
+  client: PublicClient,
+  request: any,
+  signer: WalletClient
+) {
   while (1) {
     const hash = await signer.writeContract(request);
-    const transaction = await PUBLIC_CLIENT.waitForTransactionReceipt({
+    const transaction = await client.waitForTransactionReceipt({
       confirmations: 5,
       hash,
       pollingInterval: 12000,

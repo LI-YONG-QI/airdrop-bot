@@ -1,6 +1,6 @@
 import { getTime, randomDelay } from "./time";
 
-export function createConfig(
+export function createCronConfig(
   interaction: () => Promise<void>,
   cronTime: string,
   delay: number
@@ -21,7 +21,9 @@ export function createConfig(
   };
 }
 
-export function parseCronJob(cronJob: string[]) {
+export function parseCronJob(cronJob: string[] | undefined) {
+  if (cronJob === undefined) return "* */10 * * * *";
+
   const parseResult = cronJob.map((job) => {
     if (job.includes('"')) {
       return job.replace('"', "");
