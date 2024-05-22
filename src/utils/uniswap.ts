@@ -1,13 +1,56 @@
+import {
+  Address,
+  Chain,
+  GetContractReturnType,
+  PublicClient,
+  Transport,
+  getContract,
+} from "viem";
+
 import { sendTransaction } from "../libs/transaction";
 import { UniswapParams } from "./contracts/uniswap/params";
-import { UNISWAP_ROUTER, UNI_V3_POOl } from "./contracts/uniswap";
-import { PUBLIC_CLIENT } from "./clients/public";
-import { Interaction } from "../classes/protocol";
+import { Execution } from "../classes/protocol";
+import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "./contracts/abis";
 
-async function getPrice() {
-  const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();
+function getUniswapContractAddress(chain: string): {
+  router: Address;
+  pool: Address;
+} {
+  switch (chain) {
+    case "base":
+      return {
+        router: "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD",
+        pool: "0x93e8542E6CA0eFFfb9D57a270b76712b968A38f5",
+      };
+  }
 
-  const logs = await UNI_V3_POOl.getEvents.Swap(undefined, {
+  throw new Error("Invalid chain");
+}
+
+function getUniswapContract(publicClient: PublicClient<Transport, Chain>) {
+  const address = getUniswapContractAddress(publicClient.chain.name);
+
+  return {
+    router: getContract({
+      address: address.router,
+      abi: UNISWAP_ROUTER_ABI,
+      client: { public: publicClient },
+    }),
+
+    pool: getContract({
+      address: address.pool,
+      abi: UNI_V3_POOL_ABI,
+      client: { public: publicClient },
+    }),
+  };
+}
+
+async function getPrice(
+  pool: GetContractReturnType<typeof UNI_V3_POOL_ABI, { public: PublicClient }>,
+  client: PublicClient
+) {
+  const latestBlockNumber = await client.getBlockNumber();
+  const logs = await pool.getEvents.Swap(undefined, {
     fromBlock: latestBlockNumber - BigInt(100),
     toBlock: latestBlockNumber,
   });
@@ -26,12 +69,14 @@ async function getPrice() {
   throw new Error("No price found");
 }
 
-export const uniswap: Interaction = async (_signer, amount) => {
-  const price = await getPrice();
+export const uniswap: Execution = async (publicClient, _signer, amount) => {
+  const { router, pool } = getUniswapContract(publicClient);
+
+  const price = await getPrice(pool, publicClient);
   const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
   const params = new UniswapParams(BigInt(price), amount);
 
-  const { request } = await UNISWAP_ROUTER.simulate.execute(
+  const { request } = await router.simulate.execute(
     [params.command, params.formatInputs(), deadline],
     {
       account: _signer.account,
@@ -40,5 +85,5 @@ export const uniswap: Interaction = async (_signer, amount) => {
   );
 
   console.log("Swap...");
-  await sendTransaction(request, _signer);
+  await sendTransaction(publicClient, request, _signer);
 };

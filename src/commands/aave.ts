@@ -1,9 +1,10 @@
-import { parseEther } from "viem";
+import { Hex, parseEther } from "viem";
 import { Command } from "commander";
 
-import { Protocol } from "../types/protocol";
+import { Bot } from "../classes/bot";
 import { aave as aaveFn } from "../utils/aave";
 import { parseCronJob } from "../libs/cron";
+import { ProtocolParams } from "../classes/protocol";
 
 export const aave = new Command("aave");
 
@@ -17,15 +18,26 @@ aave
     "-c, --cronjob [cron job...]",
     'cron job expression (default: "* */10 * * * *" every 10 minutes)'
   )
-  .action((options) => {
-    const aaveProtocol = new Protocol(
-      options.pk,
-      options.chain || "base",
-      aaveFn,
-      parseEther(options.amount),
-      parseCronJob(options.cronjob),
-      Number(options.delay) || 0
-    );
+  .action(
+    (options: {
+      pk: Hex;
+      amount: string;
+      chain: "base" | "sepolia";
+      cronjob: string[];
+      delay: string;
+    }) => {
+      const protocolParams: ProtocolParams = {
+        amount: parseEther(options.amount),
+        privateKey: options.pk,
+        chain: options.chain || "bot",
+        execution: aaveFn,
+      };
+      const aaveProtocol = new Bot(
+        protocolParams,
+        options.cronjob ? parseCronJob(options.cronjob) : "* */10 * * * *",
+        Number(options.delay) || 0
+      );
 
-    aaveProtocol.execute();
-  });
+      aaveProtocol.execute();
+    }
+  );
