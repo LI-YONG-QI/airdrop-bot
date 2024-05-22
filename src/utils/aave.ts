@@ -1,31 +1,16 @@
 import {
   zeroAddress,
-  WalletClient,
-  PrivateKeyAccount,
   Transport,
   Chain,
-  GetContractReturnType,
-  createPublicClient,
   getContract,
   PublicClient,
   Address,
 } from "viem";
 
 import { sendTransaction } from "../libs/transaction";
-import { Interaction } from "../types/protocol";
+import { Execution } from "../classes/protocol";
+import { AAVEFn } from "../classes/aave";
 import { AAVE_ABI, WETH_ABI } from "./contracts/abis";
-
-type AAVEContract = {
-  public: PublicClient;
-  weth: GetContractReturnType<typeof WETH_ABI, { public: PublicClient }>;
-  aave: GetContractReturnType<typeof AAVE_ABI, { public: PublicClient }>;
-};
-
-type AAVEFn = (
-  contracts: AAVEContract,
-  signer: WalletClient<Transport, Chain, PrivateKeyAccount>,
-  amount: bigint
-) => Promise<void>;
 
 const deposit: AAVEFn = async (contracts, signer, amount) => {
   const { account } = signer;
@@ -96,13 +81,11 @@ const createWETHContract = (publicClient: PublicClient<Transport, Chain>) => {
   });
 };
 
-export const aave: Interaction = async (config, _signer, amount) => {
-  const publicClient = createPublicClient<Transport, Chain>(config);
-
+export const aave: Execution = async (publicClient, _signer, _amount) => {
   const aave = createAAVEContract(publicClient);
   const weth = createWETHContract(publicClient);
   const contracts = { public: publicClient, aave, weth };
 
-  await deposit(contracts, _signer, amount);
-  await withdraw(contracts, _signer, amount);
+  await deposit(contracts, _signer, _amount);
+  await withdraw(contracts, _signer, _amount);
 };

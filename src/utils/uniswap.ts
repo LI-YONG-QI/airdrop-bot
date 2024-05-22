@@ -2,7 +2,7 @@ import { sendTransaction } from "../libs/transaction";
 import { UniswapParams } from "./contracts/uniswap/params";
 import { UNISWAP_ROUTER, UNI_V3_POOl } from "./contracts/uniswap";
 import { PUBLIC_CLIENT } from "./clients/public";
-import { Interaction } from "../types/protocol";
+import { Interaction } from "../classes/protocol";
 
 async function getPrice() {
   const latestBlockNumber = await PUBLIC_CLIENT.getBlockNumber();

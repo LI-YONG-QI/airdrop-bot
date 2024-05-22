@@ -1,7 +1,7 @@
 import { parseEther } from "viem";
 import { Command } from "commander";
 
-import { Protocol } from "../types/protocol";
+import { Protocol } from "../classes/protocol";
 import { uniswap as uniswapFn } from "../utils/uniswap";
 import { parseCronJob } from "../libs/cron";
 
