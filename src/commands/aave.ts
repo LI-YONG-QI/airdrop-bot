@@ -16,7 +16,7 @@ aave
   .option("    --chain [chain name]", "[base | sepolia] (default: base)")
   .option(
     "-c, --cronjob [cron job...]",
-    'cron job expression (default: "* */10 * * * *" every 10 minutes)'
+    'cron job expression (default: "0 */10 * * * *" every 10 minutes)'
   )
   .action(
     (options: {
@@ -29,12 +29,12 @@ aave
       const protocolParams: ProtocolParams = {
         amount: parseEther(options.amount),
         privateKey: options.pk,
-        chain: options.chain || "bot",
+        chain: options.chain || "base",
         execution: aaveFn,
       };
       const aaveProtocol = new Bot(
         protocolParams,
-        options.cronjob ? parseCronJob(options.cronjob) : "* */10 * * * *",
+        options.cronjob ? parseCronJob(options.cronjob) : "0 */10 * * * *",
         Number(options.delay) || 0
       );
 
