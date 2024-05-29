@@ -1,6 +1,6 @@
 {
   "name": "airdrop-bot",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "This is a simple airdrop bot that can be used to interact onchain protocols",
   "main": "dist/index.js",
   "bin": {
