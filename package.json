@@ -43,7 +43,6 @@
     "@types/node": "^20.12.7",
     "eslint": "^9.3.0",
     "globals": "^15.3.0",
-    "pre-commit": "^1.2.2",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
