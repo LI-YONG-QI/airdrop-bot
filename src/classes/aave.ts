@@ -5,14 +5,20 @@ import {
   Chain,
   GetContractReturnType,
   PublicClient,
+  Abi,
 } from "viem";
 
 import { AAVE_ABI, WETH_ABI } from "../utils/contracts/abis";
 
+type Contract<T extends Abi> = GetContractReturnType<
+  T,
+  { public: PublicClient }
+>;
+
 export type AAVEContract = {
   public: PublicClient;
-  weth: GetContractReturnType<typeof WETH_ABI, { public: PublicClient }>;
-  aave: GetContractReturnType<typeof AAVE_ABI, { public: PublicClient }>;
+  weth: Contract<typeof WETH_ABI>;
+  aave: Contract<typeof AAVE_ABI>;
 };
 
 export type AAVEFn = (

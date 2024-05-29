@@ -32,6 +32,7 @@ aave
         chain: options.chain || "base",
         execution: aaveFn,
       };
+
       const aaveProtocol = new Bot(
         protocolParams,
         options.cronjob ? parseCronJob(options.cronjob) : "0 */10 * * * *",

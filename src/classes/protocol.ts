@@ -22,6 +22,7 @@ export type Execution = (
 ) => Promise<void>;
 
 export type ProtocolExecution = () => Promise<void>;
+
 export type ProtocolParams = {
   privateKey: Hex;
   chain: Chain;
@@ -54,7 +55,7 @@ export class Protocol {
     return _publicClient;
   }
 
-  setSigner(config: ClientConfig<Transport, viemChain>, privateKey: Hex) {
+  setSigner(config: ClientConfig, privateKey: Hex) {
     const account = privateKeyToAccount(privateKey);
     const _signer = createWalletClient<Transport, viemChain, PrivateKeyAccount>(
       {
@@ -67,7 +68,7 @@ export class Protocol {
     return _signer;
   }
 
-  createClientConfig(chain: Chain): ClientConfig<Transport, viemChain> {
+  createClientConfig(chain: Chain): ClientConfig {
     const _chain = chain === "base" ? base : sepolia;
     return {
       chain: _chain,
