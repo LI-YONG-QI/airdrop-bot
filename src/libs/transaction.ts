@@ -5,7 +5,7 @@ export async function sendTransaction(
   request: any,
   signer: WalletClient
 ) {
-  while (1) {
+  while (true) {
     const hash = await signer.writeContract(request);
     const transaction = await client.waitForTransactionReceipt({
       confirmations: 5,

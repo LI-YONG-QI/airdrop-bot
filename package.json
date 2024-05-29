@@ -13,8 +13,12 @@
   "homepage": "https://twitter.com/ShileXe",
   "scripts": {
     "bot": "node dist/index.mjs",
-    "build": "tsup --config tsup.config.ts"
+    "build": "tsup --config tsup.config.ts",
+    "lint": "eslint src/*.ts"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "keywords": [
     "cli",
     "blockchain",
@@ -25,7 +29,7 @@
     "dist"
   ],
   "author": "LI-YONG-QI",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "commander": "^12.0.0",
     "cron": "^3.1.7",
@@ -33,11 +37,15 @@
     "viem": "^2.9.22"
   },
   "devDependencies": {
-    "@types/commander": "^2.12.2",
+    "@eslint/js": "^9.3.0",
     "@types/figlet": "^1.5.8",
     "@types/node": "^20.12.7",
+    "eslint": "^9.3.0",
+    "globals": "^15.3.0",
+    "pre-commit": "^1.2.2",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.11.0"
   }
 }
