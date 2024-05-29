@@ -14,7 +14,7 @@
   "scripts": {
     "bot": "node dist/index.mjs",
     "build": "tsup --config tsup.config.ts",
-    "lint": "eslint src/*.ts"
+    "lint": "eslint src/**/*.ts"
   },
   "pre-commit": [
     "lint"
