@@ -14,7 +14,8 @@
   "scripts": {
     "bot": "node dist/index.mjs",
     "build": "tsup --config tsup.config.ts",
-    "lint": "eslint 'src/**/*.ts' --fix"
+    "lint": "eslint 'src/**/*.ts' --fix",
+    "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run lint"

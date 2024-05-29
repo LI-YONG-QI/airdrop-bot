@@ -73,7 +73,7 @@ export class UniswapParams {
     return formatInputs;
   }
 
-  getParams(type: string, value: any[]) {
+  getParams(type: string, value: Value[]) {
     return encodeAbiParameters(INPUT_ABI[type], value);
   }
 
