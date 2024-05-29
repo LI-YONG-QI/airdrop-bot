@@ -16,6 +16,7 @@
     "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",
     "lint": "eslint 'src/**/*.ts'",
+    "prepublishOnly": "npm run build",
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
