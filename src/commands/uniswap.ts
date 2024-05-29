@@ -10,33 +10,31 @@ export const uniswap = new Command("uniswap");
 
 uniswap
   .description("Start the uniswap protocol")
-  .option("-p, --pk <private key>", "private key of signer")
-  .option("    --amount <amount>", "amount of ETH")
-  .option("-d, --delay [delay time]", "delay in minutes (default: 0)")
-  .option("    --chain [chain name]", "[base | sepolia] (default: base)")
+  .argument("<pk>", "private key of signer")
+  .argument("<amount>", "amount of ETH")
   .option(
     "-c, --cronjob [cron job...]",
     'cron job expression (default: "* */10 * * * *" every 10 minutes)'
   )
+  .option("    --chain [chain name]", "[base | sepolia] (default: base)")
+  .option("-d, --delay [delay time]", "delay in minutes (default: 0)")
   .action(
-    (options: {
-      pk: Hex;
-      amount: string;
+    (pk: Hex, amount: string, options: {
       chain: "base" | "sepolia";
       cronjob: string[];
       delay: string;
     }) => {
       const protocolParams: ProtocolParams = {
-        amount: parseEther(options.amount),
-        chain: options.chain,
-        privateKey: options.pk,
+        amount: parseEther(amount),
+        chain: options.chain || "base",
+        privateKey: pk,
         execution: uniswapFn,
       };
 
       const uniswapProtocol = new Bot(
         protocolParams,
-        parseCronJob(options.cronjob),
-        Number(options.delay)
+        options.cronjob ? parseCronJob(options.cronjob) : "0 */10 * * * *",
+        Number(options.delay) || 0
       );
 
       uniswapProtocol.execute();

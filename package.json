@@ -12,7 +12,8 @@
   },
   "homepage": "https://twitter.com/ShileXe",
   "scripts": {
-    "bot": "node dist/index.mjs",
+    "bot:dev": "ts-node src/index.ts",
+    "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",
     "lint": "eslint 'src/**/*.ts'",
     "prepare": "simple-git-hooks"
