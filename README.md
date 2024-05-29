@@ -38,10 +38,8 @@ echo $PK
 
 ```bash
 # execute AAVE
-airdrop-bot aave -c "0 */10 * * * *" -p $PK --delay 10 --amount 0.01
+airdrop-bot aave $PK 0.01 -c "0 */10 * * * *" --delay 10
 ```
-
-- -p (--pk) & --amount is required
 
 Notice: cron job expression is from **second** not minute
 
