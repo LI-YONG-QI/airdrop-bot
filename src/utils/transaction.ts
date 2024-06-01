@@ -1,4 +1,4 @@
-import { PublicClient, WalletClient, WriteContractParameters } from "viem";
+import type { PublicClient, WalletClient, WriteContractParameters } from "viem";
 
 export async function sendTransaction(
   client: PublicClient,

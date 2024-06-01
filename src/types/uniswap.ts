@@ -1,4 +1,5 @@
-import { Address, Hex, encodeAbiParameters, toHex } from "viem";
+import { encodeAbiParameters, toHex } from "viem";
+import type { Address, Hex } from "viem";
 
 interface ABI {
   name: string;

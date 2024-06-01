@@ -7,5 +7,4 @@ export default defineConfig({
   format: ["cjs"],
   platform: "node",
   tsconfig: "./tsconfig.json",
-  dts: true,
 });

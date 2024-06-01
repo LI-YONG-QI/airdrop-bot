@@ -8,7 +8,7 @@ import {
   Abi,
 } from "viem";
 
-import { AAVE_ABI, WETH_ABI } from "../utils/contracts/abis";
+import { AAVE_ABI, WETH_ABI } from "../utils/abis";
 
 type Contract<T extends Abi> = GetContractReturnType<
   T,

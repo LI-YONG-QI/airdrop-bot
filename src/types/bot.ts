@@ -1,6 +1,7 @@
 import { CronJob } from "cron";
-import { Protocol, ProtocolExecution, ProtocolParams } from "./protocol";
-import { createCronConfig } from "../libs/cron";
+import type { ProtocolExecution, ProtocolParams } from "./protocol";
+import { Protocol } from "./protocol";
+import { createCronConfig } from "../models/cron";
 
 export class Bot {
   public cron: CronJob;
