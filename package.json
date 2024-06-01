@@ -21,7 +21,7 @@
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
-    "pre-commit": "npm run format"
+    "pre-commit": "npm run lint && npm run format"
   },
   "keywords": [
     "cli",
