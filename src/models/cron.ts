@@ -1,4 +1,4 @@
-import { getTime, randomDelay } from "./time";
+import { getTime, randomDelay } from "../utils/time";
 
 export function createCronConfig(
   interaction: () => Promise<void>,

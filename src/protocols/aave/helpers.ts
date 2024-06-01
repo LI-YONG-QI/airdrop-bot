@@ -1,6 +1,6 @@
 import { Transport, Chain, getContract, PublicClient, Address } from "viem";
-import { AAVE_ABI, WETH_ABI } from "../abis";
-import { AAVEContract } from "../../../classes/aave";
+import { AAVE_ABI, WETH_ABI } from "../../utils/abis";
+import { AAVEContract } from "../../types/aave";
 
 const getAaveAddress = (chain: string): Address => {
   switch (chain) {

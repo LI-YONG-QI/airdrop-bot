@@ -1,15 +1,10 @@
 import { Hex, parseEther } from "viem";
 import { Command } from "commander";
 
-import { Bot } from "../classes/bot";
-import type { Execution, ProtocolParams } from "../classes/protocol";
-import { parseCronJob } from "../libs/cron";
-
-type CommandActionOptions = {
-  delay: string;
-  chain?: "base" | "sepolia";
-  cronjob?: string[];
-};
+import { Bot } from "../types/bot";
+import type { Execution, ProtocolParams } from "../types/protocol";
+import type { CommandActionOptions } from "../types/commands";
+import { parseCronJob } from "./cron";
 
 const DEFAULT = {
   chain: "base" as const,

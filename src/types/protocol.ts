@@ -1,14 +1,12 @@
-import {
+import { createWalletClient, http, createPublicClient } from "viem";
+import type {
+  Chain as viemChain,
+  WalletClient,
+  ClientConfig,
+  PublicClient,
   Hex,
   PrivateKeyAccount,
   Transport,
-  Chain as viemChain,
-  WalletClient,
-  createWalletClient,
-  ClientConfig,
-  http,
-  PublicClient,
-  createPublicClient,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base, sepolia } from "viem/chains";

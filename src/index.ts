@@ -2,9 +2,9 @@
 
 import { Command } from "commander";
 import { textSync } from "figlet";
-import { createProtocolCommand } from "./libs/commands";
-import { aave as aaveFn } from "./utils/aave";
-import { uniswap as uniswapFn } from "./utils/uniswap";
+import { createProtocolCommand } from "./models/commands";
+import { aave as aaveFn } from "./protocols/aave";
+import { uniswap as uniswapFn } from "./protocols/uniswap/scripts";
 import packageJson from "../package.json";
 
 console.log(textSync("BOT"));

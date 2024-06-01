@@ -7,10 +7,7 @@ import {
   getContract,
 } from "viem";
 
-import { sendTransaction } from "../libs/transaction";
-import { UniswapParams } from "./contracts/uniswap/params";
-import { Execution } from "../classes/protocol";
-import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "./contracts/abis";
+import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "../../utils/abis";
 
 function getUniswapContractAddress(chain: string): {
   router: Address;
@@ -27,7 +24,9 @@ function getUniswapContractAddress(chain: string): {
   throw new Error("Invalid chain");
 }
 
-function getUniswapContract(publicClient: PublicClient<Transport, Chain>) {
+export function getUniswapContract(
+  publicClient: PublicClient<Transport, Chain>
+) {
   const address = getUniswapContractAddress(publicClient.chain.name);
 
   return {
@@ -45,7 +44,7 @@ function getUniswapContract(publicClient: PublicClient<Transport, Chain>) {
   };
 }
 
-async function getPrice(
+export async function getPrice(
   pool: GetContractReturnType<typeof UNI_V3_POOL_ABI, { public: PublicClient }>,
   client: PublicClient
 ) {
@@ -68,22 +67,3 @@ async function getPrice(
 
   throw new Error("No price found");
 }
-
-export const uniswap: Execution = async (publicClient, _signer, amount) => {
-  const { router, pool } = getUniswapContract(publicClient);
-
-  const price = await getPrice(pool, publicClient);
-  const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(60 * 5);
-  const params = new UniswapParams(BigInt(price), amount);
-
-  const { request } = await router.simulate.execute(
-    [params.command, params.formatInputs(), deadline],
-    {
-      account: _signer.account,
-      value: amount,
-    }
-  );
-
-  console.log("Swap...");
-  await sendTransaction(publicClient, request, _signer);
-};

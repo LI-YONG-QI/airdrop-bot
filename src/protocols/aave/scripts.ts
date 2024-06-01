@@ -1,9 +1,9 @@
 import { zeroAddress } from "viem";
 
-import { sendTransaction } from "../libs/transaction";
-import { Execution } from "../classes/protocol";
-import { AAVEFn } from "../classes/aave";
-import { createAAVEContracts } from "./contracts/aave";
+import { sendTransaction } from "../../utils/transaction";
+import { Execution } from "../../types/protocol";
+import { AAVEFn } from "../../types/aave";
+import { createAAVEContracts } from "./helpers";
 
 const deposit: AAVEFn = async (contracts, signer, amount) => {
   const { account } = signer;
