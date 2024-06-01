@@ -18,7 +18,7 @@
     "lint": "eslint 'src/**/*.ts'",
     "format:fix": "npx prettier . -w",
     "format": "npx prettier . -c",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "bumpp && npm run build",
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {

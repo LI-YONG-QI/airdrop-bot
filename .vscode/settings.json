@@ -1,5 +1,8 @@
 {
-  "cSpell.words": ["SEPOLIA"],
+  "cSpell.words": [
+    "bumpp",
+    "SEPOLIA"
+  ],
   "eslint.experimental.useFlatConfig": true,
 
   "editor.defaultFormatter": "esbenp.prettier-vscode",
