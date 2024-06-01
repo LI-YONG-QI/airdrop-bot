@@ -16,7 +16,8 @@
     "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",
     "lint": "eslint 'src/**/*.ts'",
-    "format": "npx prettier . --write",
+    "format:fix": "npx prettier . -w",
+    "format": "npx prettier . -c",
     "prepublishOnly": "npm run build",
     "prepare": "simple-git-hooks"
   },
