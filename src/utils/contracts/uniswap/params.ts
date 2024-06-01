@@ -5,7 +5,6 @@ interface ABI {
   type: string;
 }
 
-
 type Value = Address | bigint | boolean;
 
 const INPUT_ABI: { [key: string]: ABI[] } = {
@@ -45,7 +44,10 @@ export class UniswapParams {
 
   inputs = new Input();
 
-  constructor(public amountMin: bigint, public amount: bigint) {
+  constructor(
+    public amountMin: bigint,
+    public amount: bigint
+  ) {
     this.inputs.warp = this.getParams("warp", [this.toReceipt(2), this.amount]);
 
     this.inputs.swap = this.getSwapParams();

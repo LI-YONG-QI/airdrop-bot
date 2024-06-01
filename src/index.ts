@@ -2,20 +2,24 @@
 
 import { Command } from "commander";
 import { textSync } from "figlet";
-
-import { aave } from "./commands/aave";
-import { uniswap } from "./commands/uniswap";
+import { createProtocolCommand } from "./libs/commands";
+import { aave as aaveFn } from "./utils/aave";
+import { uniswap as uniswapFn } from "./utils/uniswap";
+import packageJson from "../package.json";
 
 console.log(textSync("BOT"));
+
+const aaveCommand = createProtocolCommand("aave", aaveFn);
+const uniswapCommand = createProtocolCommand("uniswap", uniswapFn);
 
 export const program = new Command();
 
 // Main
 program
-  .version("0.0.1", "-v, --versions", "output the current version")
+  .version(packageJson.version, "-v, --versions", "output the current version")
   .description("A simple airdrop bot")
-  .addCommand(uniswap)
-  .addCommand(aave)
+  .addCommand(aaveCommand)
+  .addCommand(uniswapCommand)
   .showHelpAfterError("(add --help for additional information)");
 
 program.parse();

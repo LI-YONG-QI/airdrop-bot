@@ -16,11 +16,12 @@
     "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",
     "lint": "eslint 'src/**/*.ts'",
+    "format": "npx prettier . --write",
     "prepublishOnly": "npm run build",
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
-    "pre-commit": "npm run lint"
+    "pre-commit": "npm run lint && npm run format"
   },
   "keywords": [
     "cli",
@@ -37,16 +38,18 @@
     "commander": "^12.0.0",
     "cron": "^3.1.7",
     "figlet": "^1.7.0",
-    "simple-git-hooks": "^2.11.1",
     "viem": "^2.9.22"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
     "@types/figlet": "^1.5.8",
     "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "bumpp": "^9.4.1",
     "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.3.0",
+    "simple-git-hooks": "^2.11.1",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",

@@ -2,10 +2,6 @@
   "cSpell.words": ["SEPOLIA"],
   "eslint.experimental.useFlatConfig": true,
 
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true
 }
