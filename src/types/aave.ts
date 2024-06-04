@@ -16,13 +16,6 @@ type Contract<T extends Abi> = GetContractReturnType<
 >;
 
 export type AAVEContract = {
-  public: PublicClient;
   weth: Contract<typeof WETH_ABI>;
   aave: Contract<typeof AAVE_ABI>;
 };
-
-export type AAVEFn = (
-  contracts: AAVEContract,
-  signer: WalletClient<Transport, Chain, PrivateKeyAccount>,
-  amount: bigint
-) => Promise<void>;

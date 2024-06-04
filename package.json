@@ -20,7 +20,8 @@
     "format:fix": "npx prettier . -w",
     "format": "npx prettier . -c",
     "prepublishOnly": "bumpp && npm run build",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "test-network": "anvil --fork-url https://base-rpc.publicnode.com --fork-block-number 15305500"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run lint && npm run format"

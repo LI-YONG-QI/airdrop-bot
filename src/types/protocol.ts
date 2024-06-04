@@ -1,85 +1,67 @@
-import { createWalletClient, http, createPublicClient } from "viem";
 import type {
   Chain as viemChain,
   WalletClient,
-  ClientConfig,
   PublicClient,
-  Hex,
   PrivateKeyAccount,
   Transport,
+  GetContractReturnType,
+  Abi,
 } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { base, sepolia } from "viem/chains";
+import { AAVE_ABI, WETH_ABI } from "../utils/abis";
 
-type Chain = "base" | "sepolia";
+export type ProtocolPublicClient = PublicClient<Transport, viemChain>;
+export type ProtocolWalletClient = WalletClient<
+  Transport,
+  viemChain,
+  PrivateKeyAccount
+>;
+
+export type Protocol = {
+  execution: ProtocolExecution;
+  publicClient: ProtocolPublicClient;
+  signer: ProtocolWalletClient;
+};
+
+type Contract<T extends Abi> = GetContractReturnType<
+  T,
+  { public: PublicClient }
+>;
+
+export type ProtocolContracts = {
+  client: { public: ProtocolPublicClient; signer: ProtocolWalletClient };
+  weth: Contract<typeof WETH_ABI>;
+  aave: Contract<typeof AAVE_ABI>;
+};
 
 export type Execution = (
-  publicClient: PublicClient<Transport, viemChain>,
-  signer: WalletClient<Transport, viemChain, PrivateKeyAccount>,
+  contracts: ProtocolContracts,
   amount: bigint
 ) => Promise<void>;
 
 export type ProtocolExecution = () => Promise<void>;
 
-export type ProtocolParams = {
-  privateKey: Hex;
-  chain: Chain;
-  amount: bigint;
-  execution: Execution;
-};
-export class Protocol {
+export class ProtocolImpl implements Protocol {
   public execution: ProtocolExecution;
-  public publicClient: PublicClient;
-  public signer: WalletClient;
 
-  constructor(params: ProtocolParams) {
-    const { privateKey, chain, amount, execution } = params;
-
-    const config = this.createClientConfig(chain);
-    const _publicClient = this.setPublicClient(config);
-    const _signer = this.setSigner(config, privateKey);
-
-    this.execution = this.createExecution(
-      execution,
-      _publicClient,
-      _signer,
-      amount
-    );
+  constructor(
+    public publicClient: ProtocolPublicClient,
+    public signer: ProtocolWalletClient,
+    createContract: (
+      publicClient_: ProtocolPublicClient,
+      signer_: ProtocolWalletClient
+    ) => ProtocolContracts,
+    _execution: Execution,
+    amount: bigint
+  ) {
+    const contracts = createContract(this.publicClient, this.signer);
+    this.execution = this.createExecution(_execution, contracts, amount);
   }
 
-  private setPublicClient(config: ClientConfig) {
-    const _publicClient = createPublicClient<Transport, viemChain>(config);
-    this.publicClient = _publicClient;
-    return _publicClient;
-  }
-
-  setSigner(config: ClientConfig, privateKey: Hex) {
-    const account = privateKeyToAccount(privateKey);
-    const _signer = createWalletClient<Transport, viemChain, PrivateKeyAccount>(
-      {
-        account,
-        ...config,
-      }
-    );
-
-    this.signer = _signer;
-    return _signer;
-  }
-
-  createClientConfig(chain: Chain): ClientConfig {
-    const _chain = chain === "base" ? base : sepolia;
-    return {
-      chain: _chain,
-      transport: http(),
-    };
-  }
-
-  createExecution(
+  private createExecution(
     execution: Execution,
-    _publicClient: PublicClient<Transport, viemChain>,
-    _signer: WalletClient<Transport, viemChain, PrivateKeyAccount>,
+    _contracts: ProtocolContracts,
     _amount: bigint
   ): () => Promise<void> {
-    return execution.bind(null, _publicClient, _signer, _amount);
+    return execution.bind(null, _contracts, _amount);
   }
 }

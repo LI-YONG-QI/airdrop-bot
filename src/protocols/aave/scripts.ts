@@ -1,44 +1,45 @@
 import { zeroAddress } from "viem";
 
 import { sendTransaction } from "../../utils/transaction";
-import { Execution } from "../../types/protocol";
-import { AAVEFn } from "../../types/aave";
-import { createAAVEContracts } from "./helpers";
+import type { Execution, ProtocolContracts } from "../../types/protocol";
 
-const deposit: AAVEFn = async (contracts, signer, amount) => {
-  const { account } = signer;
+type AAVEFn = (contracts: ProtocolContracts, amount: bigint) => Promise<void>;
+
+const deposit: AAVEFn = async (contracts, amount) => {
+  const { signer } = contracts.client;
 
   const { request } = await contracts.aave.simulate.depositETH(
-    [zeroAddress, account.address, 0],
+    [zeroAddress, signer.account.address, 0],
     {
       value: amount,
-      account,
+      account: signer.account,
     }
   );
+
   console.log("Deposit...");
-  await sendTransaction(contracts.public, request, signer);
+
+  await sendTransaction(contracts.client, request);
 };
 
-const withdraw: AAVEFn = async (contracts, signer, amount) => {
-  const { account } = signer;
+const withdraw: AAVEFn = async (contracts, amount) => {
+  const { signer } = contracts.client;
+
   const { request: approveReq } = await contracts.weth.simulate.approve(
     [contracts.aave.address, amount],
-    { account: account }
+    { account: signer.account }
   );
   console.log("Approving...");
-  await sendTransaction(contracts.public, approveReq, signer);
+  await sendTransaction(contracts.client, approveReq);
 
   const { request: withdrawReq } = await contracts.aave.simulate.withdrawETH(
-    [zeroAddress, amount, account.address],
-    { account: account }
+    [zeroAddress, amount, signer.account.address],
+    { account: signer.account }
   );
   console.log("Withdraw...");
-  await sendTransaction(contracts.public, withdrawReq, signer);
+  await sendTransaction(contracts.client, withdrawReq);
 };
 
-export const aave: Execution = async (_publicClient, _signer, _amount) => {
-  const contracts = createAAVEContracts(_publicClient);
-
-  await deposit(contracts, _signer, _amount);
-  await withdraw(contracts, _signer, _amount);
+export const aave: Execution = async (contracts, amount) => {
+  await deposit(contracts, amount);
+  await withdraw(contracts, amount);
 };

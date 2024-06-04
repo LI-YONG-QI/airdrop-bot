@@ -1,6 +1,11 @@
-import { Transport, Chain, getContract, PublicClient, Address } from "viem";
+import { getContract } from "viem";
+import type { Address } from "viem";
 import { AAVE_ABI, WETH_ABI } from "../../utils/abis";
-import { AAVEContract } from "../../types/aave";
+import {
+  ProtocolContracts,
+  ProtocolPublicClient,
+  ProtocolWalletClient,
+} from "../../types/protocol";
 
 const getAaveAddress = (chain: string): Address => {
   switch (chain) {
@@ -24,7 +29,7 @@ const getWethAddress = (chain: string): Address => {
   throw new Error("Invalid chain");
 };
 
-const getAddresses = (chain: string) => {
+export const getAddresses = (chain: string) => {
   return {
     aave: getAaveAddress(chain),
     weth: getWethAddress(chain),
@@ -32,21 +37,23 @@ const getAddresses = (chain: string) => {
 };
 
 export const createAAVEContracts = (
-  publicClient: PublicClient<Transport, Chain>
-): AAVEContract => {
+  publicClient: ProtocolPublicClient,
+  signer: ProtocolWalletClient
+): ProtocolContracts => {
   const addresses = getAddresses(publicClient.chain.name);
 
   return {
-    public: publicClient,
+    client: { public: publicClient, signer },
+
     aave: getContract({
       address: addresses.aave,
       abi: AAVE_ABI,
-      client: { public: publicClient },
+      client: { public: publicClient, wallet: signer },
     }),
     weth: getContract({
       address: addresses.weth,
       abi: WETH_ABI,
-      client: { public: publicClient },
+      client: { public: publicClient, wallet: signer },
     }),
   };
 };

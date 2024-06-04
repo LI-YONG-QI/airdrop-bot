@@ -1,25 +1,16 @@
 import { CronJob } from "cron";
-import type { ProtocolExecution, ProtocolParams } from "./protocol";
-import { Protocol } from "./protocol";
+import type { ProtocolExecution, Protocol } from "./protocol";
 import { createCronConfig } from "../models/cron";
 
 export class Bot {
   public cron: CronJob;
-  public protocol: Protocol;
 
   constructor(
-    protocolParams: ProtocolParams,
-    public cronTime: string,
-    public delay: number = 0
+    public protocol: Protocol,
+    public delay: number = 0,
+    cronTime: string
   ) {
-    const _protocol = this.initProtocol(protocolParams);
-    this.initCronJob(_protocol.execution, cronTime, delay);
-  }
-
-  initProtocol(protocolParams: ProtocolParams) {
-    const _protocol = new Protocol(protocolParams);
-    this.protocol = _protocol;
-    return _protocol;
+    this.initCronJob(protocol.execution, cronTime, delay);
   }
 
   initCronJob(
@@ -40,7 +31,7 @@ export class Bot {
   execute() {
     console.log(`Starting app ...`);
     console.log(`Chain ${this.protocol.publicClient.chain?.name}`);
-    console.log(`Time ${this.cronTime} | Delay ${this.delay} minutes`);
+    console.log(`Time ${"Todo time display"} | Delay ${this.delay} minutes`);
     console.log(`Account ${this.protocol.signer.account?.address}`);
     this.cron.start();
   }
