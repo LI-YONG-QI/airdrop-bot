@@ -1,31 +1,30 @@
 import type {
-  Chain as viemChain,
+  Chain,
   WalletClient,
   PublicClient,
-  PrivateKeyAccount,
-  Transport,
   GetContractReturnType,
   Abi,
+  PrivateKeyAccount,
 } from "viem";
 import { AAVE_ABI, WETH_ABI } from "../utils/abis";
 
-export type ProtocolPublicClient = PublicClient<Transport, viemChain>;
-export type ProtocolWalletClient = WalletClient<
-  Transport,
-  viemChain,
-  PrivateKeyAccount
+type Contract<T extends Abi> = GetContractReturnType<
+  T,
+  { public: PublicClient }
 >;
+
+export type ProtocolPublicClient = PublicClient & { chain: Chain };
+
+export type ProtocolWalletClient = WalletClient & {
+  account: PrivateKeyAccount;
+  chain: Chain;
+};
 
 export type Protocol = {
   execution: ProtocolExecution;
   publicClient: ProtocolPublicClient;
   signer: ProtocolWalletClient;
 };
-
-type Contract<T extends Abi> = GetContractReturnType<
-  T,
-  { public: PublicClient }
->;
 
 export type ProtocolContracts = {
   client: { public: ProtocolPublicClient; signer: ProtocolWalletClient };

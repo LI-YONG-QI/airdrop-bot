@@ -6,14 +6,11 @@ export async function sendTransaction(
   request: WriteContractParameters
 ) {
   while (true) {
-    console.log("Sending transaction...");
-    console.log(client.signer.chain);
-    console.log(request);
     const hash = await client.signer.writeContract(request);
     const transaction = await client.public.waitForTransactionReceipt({
-      confirmations: 5,
+      confirmations: 1,
       hash,
-      pollingInterval: 12000,
+      pollingInterval: 4_000,
     });
 
     console.log(

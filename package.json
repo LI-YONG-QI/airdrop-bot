@@ -13,6 +13,7 @@
   "homepage": "https://twitter.com/ShileXe",
   "scripts": {
     "bot:dev": "ts-node src/index.ts",
+    "pretest": "ts-node test/reset-network.ts",
     "test": "vitest",
     "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",
@@ -20,8 +21,7 @@
     "format:fix": "npx prettier . -w",
     "format": "npx prettier . -c",
     "prepublishOnly": "bumpp && npm run build",
-    "prepare": "simple-git-hooks",
-    "test-network": "anvil --fork-url https://base-rpc.publicnode.com --fork-block-number 15305500"
+    "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run lint && npm run format"
@@ -40,6 +40,7 @@
   "dependencies": {
     "commander": "^12.0.0",
     "cron": "^3.1.7",
+    "dotenv": "^16.4.5",
     "figlet": "^1.7.0",
     "viem": "^2.9.22"
   },

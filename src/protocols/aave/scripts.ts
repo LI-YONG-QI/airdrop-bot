@@ -24,6 +24,7 @@ const deposit: AAVEFn = async (contracts, amount) => {
 const withdraw: AAVEFn = async (contracts, amount) => {
   const { signer } = contracts.client;
 
+  console.log("Enable WETH... ");
   const { request: approveReq } = await contracts.weth.simulate.approve(
     [contracts.aave.address, amount],
     { account: signer.account }

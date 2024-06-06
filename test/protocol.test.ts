@@ -1,28 +1,34 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeEach, describe, it } from "vitest";
+import { parseEther } from "viem";
+
 import { state } from "./__setup";
-import { testClient } from "./helpers";
+import { aave } from "../src/protocols/aave/scripts";
+import { createContract, mockProtocol, TEST_USER, testClient } from "./helpers";
+import type { ProtocolContracts } from "../src/types/protocol";
 
-describe("protocol", () => {
+let contracts: ProtocolContracts;
+
+describe("aave scripts", () => {
   beforeEach(async () => {
-    return async () => {
-      console.log("reset state");
-      await testClient.loadState({ state });
-    };
+    await testClient.revert({ id: state });
+    await testClient.snapshot();
+    contracts = createContract(mockProtocol.publicClient, mockProtocol.signer);
   });
 
-  it("test", async () => {
-    console.log(await testClient.getBlockNumber());
-    await testClient.mine({ blocks: 1 });
-    console.log(await testClient.getBlockNumber());
-
-    expect(true).toBe(true);
+  afterAll(async () => {
+    await testClient.revert({ id: state });
+    await testClient.snapshot();
   });
 
-  it("test 2", async () => {
-    console.log(await testClient.getBlockNumber());
-    await testClient.mine({ blocks: 1 });
-    console.log(await testClient.getBlockNumber());
+  it("Get balance", async () => {
+    console.log(
+      await mockProtocol.publicClient.getBalance({
+        address: TEST_USER,
+      })
+    );
+  });
 
-    expect(true).toBe(true);
+  it("Aave execution", async () => {
+    await aave(contracts, parseEther("0.0001"));
   });
 });

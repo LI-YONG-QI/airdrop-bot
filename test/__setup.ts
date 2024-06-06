@@ -1,9 +1,13 @@
-import type { Hex } from "viem";
 import { beforeAll } from "vitest";
-import { testClient } from "./helpers";
+import { TEST_USER, testClient } from "./helpers";
+import { parseEther, type Hex } from "viem";
 
 export let state: Hex;
 
 beforeAll(async () => {
-  state = await testClient.dumpState();
+  await testClient.setBalance({
+    address: TEST_USER,
+    value: parseEther("100"),
+  });
+  state = await testClient.snapshot();
 });

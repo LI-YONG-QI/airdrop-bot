@@ -1,12 +1,4 @@
-import {
-  WalletClient,
-  PrivateKeyAccount,
-  Transport,
-  Chain,
-  GetContractReturnType,
-  PublicClient,
-  Abi,
-} from "viem";
+import { GetContractReturnType, PublicClient, Abi } from "viem";
 
 import { AAVE_ABI, WETH_ABI } from "../utils/abis";
 
