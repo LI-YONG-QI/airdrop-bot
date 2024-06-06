@@ -8,7 +8,7 @@ import type { ProtocolContracts } from "../src/types/protocol";
 
 let contracts: ProtocolContracts;
 
-describe("uniswap scripts", () => {
+describe("aave scripts", () => {
   beforeEach(async () => {
     await testClient.revert({ id: state });
     await testClient.snapshot();
