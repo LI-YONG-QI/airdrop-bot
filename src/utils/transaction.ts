@@ -17,7 +17,7 @@ export async function sendTransaction(
       `Tx Hash: ${transaction.transactionHash} - ${transaction.status}`
     );
 
-    if (transaction.status === "success") break;
+    if (transaction.status === "success") return transaction.transactionHash;
 
     console.log("Reverted !! Retrying...");
   }

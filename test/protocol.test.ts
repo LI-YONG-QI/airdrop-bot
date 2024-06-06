@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, it } from "vitest";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { parseEther } from "viem";
 
 import { state } from "./__setup";
@@ -29,6 +29,17 @@ describe("aave scripts", () => {
   });
 
   it("Aave execution", async () => {
-    await aave(contracts, parseEther("0.0001"));
+    const beforeUserBalance = await testClient.getBalance({
+      address: TEST_USER,
+    });
+
+    const txs = await aave(contracts, parseEther("0.0001"));
+    const afterUserBalance = await testClient.getBalance({
+      address: TEST_USER,
+    });
+
+    expect(beforeUserBalance).toBeGreaterThan(afterUserBalance);
+    expect(txs.length).toBe(3);
+    //TODO: expect logs data
   });
 });

@@ -1,11 +1,12 @@
 import { getContract } from "viem";
 import type { Address } from "viem";
-import { AAVE_ABI, WETH_ABI } from "../../utils/abis";
-import {
+
+import type {
   ProtocolContracts,
   ProtocolPublicClient,
   ProtocolWalletClient,
 } from "../../types/protocol";
+import { AAVE_ABI, WETH_ABI } from "../../utils/abis";
 
 const getAaveAddress = (chain: string): Address => {
   switch (chain) {

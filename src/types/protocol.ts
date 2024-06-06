@@ -5,6 +5,7 @@ import type {
   GetContractReturnType,
   Abi,
   PrivateKeyAccount,
+  Hex,
 } from "viem";
 import { AAVE_ABI, WETH_ABI } from "../utils/abis";
 
@@ -35,9 +36,9 @@ export type ProtocolContracts = {
 export type Execution = (
   contracts: ProtocolContracts,
   amount: bigint
-) => Promise<void>;
+) => Promise<Hex[]>;
 
-export type ProtocolExecution = () => Promise<void>;
+export type ProtocolExecution = () => Promise<Hex[]>;
 
 export class ProtocolImpl implements Protocol {
   public execution: ProtocolExecution;
@@ -60,7 +61,7 @@ export class ProtocolImpl implements Protocol {
     execution: Execution,
     _contracts: ProtocolContracts,
     _amount: bigint
-  ): () => Promise<void> {
+  ) {
     return execution.bind(null, _contracts, _amount);
   }
 }

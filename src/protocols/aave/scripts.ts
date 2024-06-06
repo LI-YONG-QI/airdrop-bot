@@ -1,9 +1,9 @@
-import { zeroAddress } from "viem";
+import { zeroAddress, type Hex } from "viem";
 
 import { sendTransaction } from "../../utils/transaction";
 import type { Execution, ProtocolContracts } from "../../types/protocol";
 
-type AAVEFn = (contracts: ProtocolContracts, amount: bigint) => Promise<void>;
+type AAVEFn = (contracts: ProtocolContracts, amount: bigint) => Promise<Hex>;
 
 const deposit: AAVEFn = async (contracts, amount) => {
   const { signer } = contracts.client;
@@ -18,10 +18,11 @@ const deposit: AAVEFn = async (contracts, amount) => {
 
   console.log("Deposit...");
 
-  await sendTransaction(contracts.client, request);
+  const tx = await sendTransaction(contracts.client, request);
+  return tx;
 };
 
-const withdraw: AAVEFn = async (contracts, amount) => {
+const approve: AAVEFn = async (contracts, amount) => {
   const { signer } = contracts.client;
 
   console.log("Enable WETH... ");
@@ -30,17 +31,31 @@ const withdraw: AAVEFn = async (contracts, amount) => {
     { account: signer.account }
   );
   console.log("Approving...");
-  await sendTransaction(contracts.client, approveReq);
+
+  const tx = await sendTransaction(contracts.client, approveReq);
+  return tx;
+};
+
+const withdraw: AAVEFn = async (contracts, amount) => {
+  const { signer } = contracts.client;
 
   const { request: withdrawReq } = await contracts.aave.simulate.withdrawETH(
     [zeroAddress, amount, signer.account.address],
     { account: signer.account }
   );
   console.log("Withdraw...");
-  await sendTransaction(contracts.client, withdrawReq);
+
+  const tx = await sendTransaction(contracts.client, withdrawReq);
+  return tx;
 };
 
 export const aave: Execution = async (contracts, amount) => {
-  await deposit(contracts, amount);
-  await withdraw(contracts, amount);
+  const txs = [] as Hex[];
+  const tx1 = await deposit(contracts, amount);
+  const tx2 = await approve(contracts, amount);
+  const tx3 = await withdraw(contracts, amount);
+
+  txs.push(tx1, tx2, tx3);
+
+  return txs;
 };

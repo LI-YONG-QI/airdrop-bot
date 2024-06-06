@@ -5,6 +5,8 @@ import {
   getContract,
   createPublicClient,
   createWalletClient,
+  publicActions,
+  walletActions,
 } from "viem";
 import type { Chain, Hex } from "viem";
 import { base } from "viem/chains";
@@ -32,7 +34,9 @@ export const testClient = createTestClient({
   ...testConfig,
   mode: "anvil",
   cacheTime: 0, //no cache
-});
+})
+  .extend(publicActions)
+  .extend(walletActions);
 
 export const TEST_USER = privateKeyToAccount(MOCK_USER_PK).address;
 
