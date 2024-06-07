@@ -1,12 +1,7 @@
-import {
-  Address,
-  Chain,
-  GetContractReturnType,
-  PublicClient,
-  Transport,
-} from "viem";
+import { Address, GetContractReturnType, PublicClient } from "viem";
 
 import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "../../utils/abis";
+import { ProtocolPublicClient } from "../../types/protocol";
 
 export function getUniswapContractAddress(chain: string): {
   router: Address;
@@ -23,9 +18,7 @@ export function getUniswapContractAddress(chain: string): {
   throw new Error("Invalid chain");
 }
 
-export function getUniswapContract(
-  publicClient: PublicClient<Transport, Chain>
-) {
+export function getUniswapContract(publicClient: ProtocolPublicClient) {
   const address = getUniswapContractAddress(publicClient.chain.name);
 
   return {

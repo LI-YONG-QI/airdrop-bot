@@ -30,9 +30,9 @@ export class Bot {
 
   execute() {
     console.log(`Starting app ...`);
-    console.log(`Chain ${this.protocol.publicClient.chain?.name}`);
+    console.log(`Chain ${this.protocol.clients.public.chain?.name}`);
     console.log(`Time ${"Todo time display"} | Delay ${this.delay} minutes`);
-    console.log(`Account ${this.protocol.signer.account?.address}`);
+    console.log(`Account ${this.protocol.clients.signer.account?.address}`);
     this.cron.start();
   }
 }
