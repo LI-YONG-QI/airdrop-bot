@@ -1,13 +1,13 @@
 import type { WriteContractParameters } from "viem";
-import { ProtocolPublicClient, ProtocolWalletClient } from "../types/protocol";
+import { ProtocolClients } from "../types/protocol";
 
 export async function sendTransaction(
-  client: { public: ProtocolPublicClient; signer: ProtocolWalletClient },
+  clients: ProtocolClients,
   request: WriteContractParameters
 ) {
   while (true) {
-    const hash = await client.signer.writeContract(request);
-    const transaction = await client.public.waitForTransactionReceipt({
+    const hash = await clients.signer.writeContract(request);
+    const transaction = await clients.public.waitForTransactionReceipt({
       confirmations: 1,
       hash,
       pollingInterval: 4_000,

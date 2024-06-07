@@ -3,16 +3,12 @@ import { parseEther } from "viem";
 
 import { state } from "./__setup";
 import { aave } from "../src/protocols/aave/scripts";
-import { createContract, mockProtocol, TEST_USER, testClient } from "./helpers";
-import type { ProtocolContracts } from "../src/types/protocol";
+import { mockProtocol, TEST_USER, testClient } from "./helpers";
 
-let contracts: ProtocolContracts;
-
-describe("uniswap scripts", () => {
+describe("aave scripts", () => {
   beforeEach(async () => {
     await testClient.revert({ id: state });
     await testClient.snapshot();
-    contracts = createContract(mockProtocol.publicClient, mockProtocol.signer);
   });
 
   afterAll(async () => {
@@ -22,7 +18,7 @@ describe("uniswap scripts", () => {
 
   it("Get balance", async () => {
     console.log(
-      await mockProtocol.publicClient.getBalance({
+      await mockProtocol.clients.public.getBalance({
         address: TEST_USER,
       })
     );
@@ -34,7 +30,12 @@ describe("uniswap scripts", () => {
       address: TEST_USER,
     });
 
-    const txs = await aave(contracts, parseEther("0.0001"));
+    const txs = await aave(
+      mockProtocol.clients,
+      mockProtocol.contracts,
+      parseEther("0.0001")
+    );
+
     const afterUserBalance = await testClient.getBalance({
       address: TEST_USER,
     });
