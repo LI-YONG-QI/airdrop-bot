@@ -4,12 +4,11 @@ import {
   GetContractReturnType,
   PublicClient,
   Transport,
-  getContract,
 } from "viem";
 
 import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "../../utils/abis";
 
-function getUniswapContractAddress(chain: string): {
+export function getUniswapContractAddress(chain: string): {
   router: Address;
   pool: Address;
 } {
@@ -30,17 +29,12 @@ export function getUniswapContract(
   const address = getUniswapContractAddress(publicClient.chain.name);
 
   return {
-    router: getContract({
+    router: {
       address: address.router,
       abi: UNISWAP_ROUTER_ABI,
-      client: { public: publicClient },
-    }),
+    },
 
-    pool: getContract({
-      address: address.pool,
-      abi: UNI_V3_POOL_ABI,
-      client: { public: publicClient },
-    }),
+    pool: { address: address.pool, abi: UNI_V3_POOL_ABI },
   };
 }
 

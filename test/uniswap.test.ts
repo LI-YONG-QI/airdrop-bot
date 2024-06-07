@@ -2,17 +2,13 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { parseEther } from "viem";
 
 import { state } from "./__setup";
-import { aave } from "../src/protocols/aave/scripts";
-import { createContract, mockProtocol, TEST_USER, testClient } from "./helpers";
-import type { ProtocolContracts } from "../src/types/protocol";
+import { mockProtocolUniswap, TEST_USER, testClient } from "./helpers";
+import { uniswap } from "../src/protocols/uniswap";
 
-let contracts: ProtocolContracts;
-
-describe.skip("aave scripts", () => {
+describe("uniswap scripts", () => {
   beforeEach(async () => {
     await testClient.revert({ id: state });
     await testClient.snapshot();
-    contracts = createContract(mockProtocol.publicClient, mockProtocol.signer);
   });
 
   afterAll(async () => {
@@ -22,24 +18,29 @@ describe.skip("aave scripts", () => {
 
   it("Get balance", async () => {
     console.log(
-      await mockProtocol.publicClient.getBalance({
+      await mockProtocolUniswap.clients.public.getBalance({
         address: TEST_USER,
       })
     );
   });
 
   //TODO: expect logs data
-  it("Aave execution", async () => {
+  it("Uniswap execution", async () => {
     const beforeUserBalance = await testClient.getBalance({
       address: TEST_USER,
     });
 
-    const txs = await aave(contracts, parseEther("0.0001"));
+    const txs = await uniswap(
+      mockProtocolUniswap.clients,
+      mockProtocolUniswap.contracts,
+      parseEther("0.0001")
+    );
+
     const afterUserBalance = await testClient.getBalance({
       address: TEST_USER,
     });
 
     expect(beforeUserBalance).toBeGreaterThan(afterUserBalance);
-    expect(txs.length).toBe(3);
+    expect(txs.length).toBe(1);
   });
 });

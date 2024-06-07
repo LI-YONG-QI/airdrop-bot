@@ -17,7 +17,13 @@ import {
   type ProtocolContracts,
 } from "../src/types/protocol";
 import { aave, getAddresses } from "../src/protocols/aave";
-import { AAVE_ABI, WETH_ABI } from "../src/utils/abis";
+import { uniswap, getUniswapContractAddress } from "../src/protocols/uniswap";
+import {
+  AAVE_ABI,
+  UNISWAP_ROUTER_ABI,
+  WETH_ABI,
+  UNI_V3_POOL_ABI,
+} from "../src/utils/abis";
 
 const MOCK_USER_PK: Hex =
   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"; // First anvil account
@@ -69,7 +75,24 @@ export const createContract = (): ProtocolContracts => {
   };
 };
 
-const createMockProtocol = (execution: Execution, pk: Hex, amount: bigint) => {
+export const getUniswapContract = () => {
+  const address = getUniswapContractAddress("Base");
+
+  return {
+    router: {
+      address: address.router,
+      abi: UNISWAP_ROUTER_ABI,
+    },
+
+    pool: { address: address.pool, abi: UNI_V3_POOL_ABI },
+  };
+};
+
+const createMockProtocol = (
+  createContract: () => ProtocolContracts,
+  execution: Execution,
+  amount: bigint
+) => {
   return new ProtocolImpl(
     { signer, public: publicClient },
     createContract(),
@@ -79,7 +102,13 @@ const createMockProtocol = (execution: Execution, pk: Hex, amount: bigint) => {
 };
 
 export const mockProtocol = createMockProtocol(
+  createContract,
   aave,
-  MOCK_USER_PK,
+  parseEther("0.0001")
+);
+
+export const mockProtocolUniswap = createMockProtocol(
+  getUniswapContract,
+  uniswap,
   parseEther("0.0001")
 );
