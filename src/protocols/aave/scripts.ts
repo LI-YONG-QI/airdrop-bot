@@ -1,4 +1,3 @@
-import { publicClient } from "./../../../test/helpers";
 import { zeroAddress, type Hex } from "viem";
 
 import { sendTransaction } from "../../utils/transaction";
@@ -34,7 +33,7 @@ const deposit: AAVEFn = async (clients, contracts, amount) => {
 const approve: AAVEFn = async (clients, contracts, amount) => {
   const { signer } = clients;
 
-  const { request } = await publicClient.simulateContract({
+  const { request } = await clients.public.simulateContract({
     ...contracts["weth"],
     functionName: "approve",
     args: [contracts.aave.address, amount],
@@ -50,7 +49,7 @@ const approve: AAVEFn = async (clients, contracts, amount) => {
 const withdraw: AAVEFn = async (clients, contracts, amount) => {
   const { signer } = clients;
 
-  const { request } = await publicClient.simulateContract({
+  const { request } = await clients.public.simulateContract({
     ...contracts["aave"],
     functionName: "withdrawETH",
     args: [zeroAddress, amount, signer.account.address],

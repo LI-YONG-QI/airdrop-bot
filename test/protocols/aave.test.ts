@@ -1,9 +1,9 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { parseEther } from "viem";
 
-import { state } from "./__setup";
-import { aave } from "../src/protocols/aave/scripts";
-import { mockProtocol, TEST_USER, testClient } from "./helpers";
+import { mockProtocol, TEST_USER, testClient } from "../setup/helpers";
+import { state } from "../setup/__setup";
+import { aave } from "../../src/protocols/aave/scripts";
 
 describe("aave scripts", () => {
   beforeEach(async () => {

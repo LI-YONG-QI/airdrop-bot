@@ -15,15 +15,18 @@ import {
   ProtocolImpl,
   type Execution,
   type ProtocolContracts,
-} from "../src/types/protocol";
-import { aave, getAddresses } from "../src/protocols/aave";
-import { uniswap, getUniswapContractAddress } from "../src/protocols/uniswap";
+} from "../../src/types/protocol";
+import { aave, getAddresses } from "../../src/protocols/aave";
+import {
+  uniswap,
+  getUniswapContractAddress,
+} from "../../src/protocols/uniswap";
 import {
   AAVE_ABI,
   UNISWAP_ROUTER_ABI,
   WETH_ABI,
   UNI_V3_POOL_ABI,
-} from "../src/utils/abis";
+} from "../../src/utils/abis";
 
 const MOCK_USER_PK: Hex =
   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"; // First anvil account

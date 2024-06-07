@@ -36,8 +36,10 @@ export async function getPrice(
   client: PublicClient
 ) {
   const latestBlockNumber = await client.getBlockNumber();
+
+  //! Maybe not get price
   const logs = await pool.getEvents.Swap(undefined, {
-    fromBlock: latestBlockNumber - BigInt(100),
+    fromBlock: latestBlockNumber - BigInt(1000),
     toBlock: latestBlockNumber,
   });
 

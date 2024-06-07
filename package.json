@@ -13,7 +13,7 @@
   "homepage": "https://twitter.com/ShileXe",
   "scripts": {
     "bot:dev": "ts-node src/index.ts",
-    "pretest": "ts-node test/reset-network.ts",
+    "pretest": "ts-node test/setup/reset-network.ts",
     "test": "vitest",
     "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",

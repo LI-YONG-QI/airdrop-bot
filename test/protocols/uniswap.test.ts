@@ -1,9 +1,9 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { parseEther } from "viem";
 
-import { state } from "./__setup";
-import { mockProtocolUniswap, TEST_USER, testClient } from "./helpers";
-import { uniswap } from "../src/protocols/uniswap";
+import { state } from "../setup/__setup";
+import { mockProtocolUniswap, TEST_USER, testClient } from "../setup/helpers";
+import { uniswap } from "../../src/protocols/uniswap";
 
 describe("uniswap scripts", () => {
   beforeEach(async () => {
