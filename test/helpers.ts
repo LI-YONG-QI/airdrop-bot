@@ -2,7 +2,6 @@ import {
   createTestClient,
   http,
   parseEther,
-  getContract,
   createPublicClient,
   createWalletClient,
   publicActions,
@@ -16,8 +15,6 @@ import {
   ProtocolImpl,
   type Execution,
   type ProtocolContracts,
-  type ProtocolPublicClient,
-  type ProtocolWalletClient,
 } from "../src/types/protocol";
 import { aave, getAddresses } from "../src/protocols/aave";
 import { AAVE_ABI, WETH_ABI } from "../src/utils/abis";
@@ -49,34 +46,33 @@ export const signer = createWalletClient({
   account: privateKeyToAccount(MOCK_USER_PK),
 });
 
-export const createContract = (
-  publicClient: ProtocolPublicClient,
-  signer: ProtocolWalletClient
-): ProtocolContracts => {
+export const createClients = () => {
+  return {
+    public: publicClient,
+    signer,
+  };
+};
+
+export const createContract = (): ProtocolContracts => {
   const addresses = getAddresses("Base");
 
   return {
-    client: { public: publicClient, signer },
-
-    aave: getContract({
+    aave: {
       address: addresses.aave,
       abi: AAVE_ABI,
-      client: { public: publicClient, wallet: signer },
-    }),
+    },
 
-    weth: getContract({
+    weth: {
       address: addresses.weth,
       abi: WETH_ABI,
-      client: { public: publicClient, wallet: signer },
-    }),
+    },
   };
 };
 
 const createMockProtocol = (execution: Execution, pk: Hex, amount: bigint) => {
   return new ProtocolImpl(
-    publicClient,
-    signer,
-    createContract,
+    { signer, public: publicClient },
+    createContract(),
     execution,
     amount
   );

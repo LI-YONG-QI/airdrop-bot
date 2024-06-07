@@ -1,10 +1,8 @@
-import { getContract } from "viem";
 import type { Address } from "viem";
 
 import type {
   ProtocolContracts,
   ProtocolPublicClient,
-  ProtocolWalletClient,
 } from "../../types/protocol";
 import { AAVE_ABI, WETH_ABI } from "../../utils/abis";
 
@@ -38,23 +36,19 @@ export const getAddresses = (chain: string) => {
 };
 
 export const createAAVEContracts = (
-  publicClient: ProtocolPublicClient,
-  signer: ProtocolWalletClient
+  publicClient: ProtocolPublicClient
 ): ProtocolContracts => {
   const addresses = getAddresses(publicClient.chain.name);
 
   return {
-    client: { public: publicClient, signer },
-
-    aave: getContract({
+    aave: {
       address: addresses.aave,
       abi: AAVE_ABI,
-      client: { public: publicClient, wallet: signer },
-    }),
-    weth: getContract({
+    },
+
+    weth: {
       address: addresses.weth,
       abi: WETH_ABI,
-      client: { public: publicClient, wallet: signer },
-    }),
+    },
   };
 };

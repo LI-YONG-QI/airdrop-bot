@@ -2,17 +2,11 @@ import type {
   Chain,
   WalletClient,
   PublicClient,
-  GetContractReturnType,
   Abi,
   PrivateKeyAccount,
   Hex,
+  Address,
 } from "viem";
-import { AAVE_ABI, WETH_ABI } from "../utils/abis";
-
-type Contract<T extends Abi> = GetContractReturnType<
-  T,
-  { public: PublicClient }
->;
 
 export type ProtocolPublicClient = PublicClient & { chain: Chain };
 
@@ -23,17 +17,23 @@ export type ProtocolWalletClient = WalletClient & {
 
 export type Protocol = {
   execution: ProtocolExecution;
-  publicClient: ProtocolPublicClient;
-  signer: ProtocolWalletClient;
+  clients: ProtocolClients;
 };
 
 export type ProtocolContracts = {
-  client: { public: ProtocolPublicClient; signer: ProtocolWalletClient };
-  weth: Contract<typeof WETH_ABI>;
-  aave: Contract<typeof AAVE_ABI>;
+  [k in string]: {
+    address: Address;
+    abi: Abi;
+  };
+};
+
+export type ProtocolClients = {
+  public: ProtocolPublicClient;
+  signer: ProtocolWalletClient;
 };
 
 export type Execution = (
+  clients: ProtocolClients,
   contracts: ProtocolContracts,
   amount: bigint
 ) => Promise<Hex[]>;
@@ -44,24 +44,26 @@ export class ProtocolImpl implements Protocol {
   public execution: ProtocolExecution;
 
   constructor(
-    public publicClient: ProtocolPublicClient,
-    public signer: ProtocolWalletClient,
-    createContract: (
-      publicClient_: ProtocolPublicClient,
-      signer_: ProtocolWalletClient
-    ) => ProtocolContracts,
+    public clients: ProtocolClients,
+    public contracts: ProtocolContracts,
     _execution: Execution,
     amount: bigint
   ) {
-    const contracts = createContract(this.publicClient, this.signer);
-    this.execution = this.createExecution(_execution, contracts, amount);
+    //const contracts = createContract(this.publicClient, this.signer);
+    this.execution = this.createExecution(
+      _execution,
+      clients,
+      contracts,
+      amount
+    );
   }
 
   private createExecution(
     execution: Execution,
+    _clients: ProtocolClients,
     _contracts: ProtocolContracts,
     _amount: bigint
   ) {
-    return execution.bind(null, _contracts, _amount);
+    return execution.bind(null, _clients, _contracts, _amount);
   }
 }
