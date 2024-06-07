@@ -1,23 +1,23 @@
-import type { PublicClient, WalletClient, WriteContractParameters } from "viem";
+import type { WriteContractParameters } from "viem";
+import { ProtocolClients } from "../types/protocol";
 
 export async function sendTransaction(
-  client: PublicClient,
-  request: WriteContractParameters,
-  signer: WalletClient
+  clients: ProtocolClients,
+  request: WriteContractParameters
 ) {
   while (true) {
-    const hash = await signer.writeContract(request);
-    const transaction = await client.waitForTransactionReceipt({
-      confirmations: 5,
+    const hash = await clients.signer.writeContract(request);
+    const transaction = await clients.public.waitForTransactionReceipt({
+      confirmations: 1,
       hash,
-      pollingInterval: 12000,
+      pollingInterval: 4_000,
     });
 
     console.log(
       `Tx Hash: ${transaction.transactionHash} - ${transaction.status}`
     );
 
-    if (transaction.status === "success") break;
+    if (transaction.status === "success") return transaction.transactionHash;
 
     console.log("Reverted !! Retrying...");
   }

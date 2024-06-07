@@ -1,7 +1,8 @@
+import { ProtocolExecution } from "../types/protocol";
 import { getTime, randomDelay } from "../utils/time";
 
 export function createCronConfig(
-  interaction: () => Promise<void>,
+  interaction: ProtocolExecution,
   cronTime: string,
   delay: number
 ) {

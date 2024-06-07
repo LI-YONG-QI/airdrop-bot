@@ -1,5 +1,6 @@
-dist
+/dist
 .vscode
 .github
 .gitignore
 node_modules
+pnpm-lock.yaml

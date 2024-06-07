@@ -13,6 +13,8 @@
   "homepage": "https://twitter.com/ShileXe",
   "scripts": {
     "bot:dev": "ts-node src/index.ts",
+    "pretest": "ts-node test/setup/reset-network.ts",
+    "test": "vitest",
     "bot": "node dist/index.js",
     "build": "tsup --config tsup.config.ts",
     "lint": "eslint 'src/**/*.ts'",
@@ -38,6 +40,7 @@
   "dependencies": {
     "commander": "^12.0.0",
     "cron": "^3.1.7",
+    "dotenv": "^16.4.5",
     "figlet": "^1.7.0",
     "viem": "^2.9.22"
   },
@@ -54,6 +57,7 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.11.0"
+    "typescript-eslint": "^7.11.0",
+    "vitest": "^1.6.0"
   }
 }

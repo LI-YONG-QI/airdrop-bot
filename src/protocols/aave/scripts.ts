@@ -1,44 +1,74 @@
-import { zeroAddress } from "viem";
+import { zeroAddress, type Hex } from "viem";
 
 import { sendTransaction } from "../../utils/transaction";
-import { Execution } from "../../types/protocol";
-import { AAVEFn } from "../../types/aave";
-import { createAAVEContracts } from "./helpers";
+import type {
+  Execution,
+  ProtocolContracts,
+  ProtocolClients,
+} from "../../types/protocol";
 
-const deposit: AAVEFn = async (contracts, signer, amount) => {
-  const { account } = signer;
+type AAVEFn = (
+  client: ProtocolClients,
+  contracts: ProtocolContracts,
+  amount: bigint
+) => Promise<Hex>;
 
-  const { request } = await contracts.aave.simulate.depositETH(
-    [zeroAddress, account.address, 0],
-    {
-      value: amount,
-      account,
-    }
-  );
+const deposit: AAVEFn = async (clients, contracts, amount) => {
+  const { signer, public: publicClient } = clients;
+
+  const { request } = await publicClient.simulateContract({
+    ...contracts["aave"],
+    functionName: "depositETH",
+    args: [zeroAddress, signer.account.address, 0],
+    account: signer.account,
+    value: amount,
+  });
+
   console.log("Deposit...");
-  await sendTransaction(contracts.public, request, signer);
+
+  const tx = await sendTransaction(clients, request);
+  return tx;
 };
 
-const withdraw: AAVEFn = async (contracts, signer, amount) => {
-  const { account } = signer;
-  const { request: approveReq } = await contracts.weth.simulate.approve(
-    [contracts.aave.address, amount],
-    { account: account }
-  );
+const approve: AAVEFn = async (clients, contracts, amount) => {
+  const { signer } = clients;
+
+  const { request } = await clients.public.simulateContract({
+    ...contracts["weth"],
+    functionName: "approve",
+    args: [contracts.aave.address, amount],
+    account: signer.account,
+  });
+
   console.log("Approving...");
-  await sendTransaction(contracts.public, approveReq, signer);
 
-  const { request: withdrawReq } = await contracts.aave.simulate.withdrawETH(
-    [zeroAddress, amount, account.address],
-    { account: account }
-  );
-  console.log("Withdraw...");
-  await sendTransaction(contracts.public, withdrawReq, signer);
+  const tx = await sendTransaction(clients, request);
+  return tx;
 };
 
-export const aave: Execution = async (_publicClient, _signer, _amount) => {
-  const contracts = createAAVEContracts(_publicClient);
+const withdraw: AAVEFn = async (clients, contracts, amount) => {
+  const { signer } = clients;
 
-  await deposit(contracts, _signer, _amount);
-  await withdraw(contracts, _signer, _amount);
+  const { request } = await clients.public.simulateContract({
+    ...contracts["aave"],
+    functionName: "withdrawETH",
+    args: [zeroAddress, amount, signer.account.address],
+    account: signer.account,
+  });
+
+  console.log("Withdraw...");
+
+  const tx = await sendTransaction(clients, request);
+  return tx;
+};
+
+export const aave: Execution = async (clients, contracts, amount) => {
+  const txs = [] as Hex[];
+  const tx1 = await deposit(clients, contracts, amount);
+  const tx2 = await approve(clients, contracts, amount);
+  const tx3 = await withdraw(clients, contracts, amount);
+
+  txs.push(tx1, tx2, tx3);
+
+  return txs;
 };

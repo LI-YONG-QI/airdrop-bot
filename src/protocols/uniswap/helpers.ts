@@ -1,15 +1,9 @@
-import {
-  Address,
-  Chain,
-  GetContractReturnType,
-  PublicClient,
-  Transport,
-  getContract,
-} from "viem";
+import { Address, GetContractReturnType, PublicClient } from "viem";
 
 import { UNISWAP_ROUTER_ABI, UNI_V3_POOL_ABI } from "../../utils/abis";
+import { ProtocolPublicClient } from "../../types/protocol";
 
-function getUniswapContractAddress(chain: string): {
+export function getUniswapContractAddress(chain: string): {
   router: Address;
   pool: Address;
 } {
@@ -24,23 +18,16 @@ function getUniswapContractAddress(chain: string): {
   throw new Error("Invalid chain");
 }
 
-export function getUniswapContract(
-  publicClient: PublicClient<Transport, Chain>
-) {
+export function getUniswapContract(publicClient: ProtocolPublicClient) {
   const address = getUniswapContractAddress(publicClient.chain.name);
 
   return {
-    router: getContract({
+    router: {
       address: address.router,
       abi: UNISWAP_ROUTER_ABI,
-      client: { public: publicClient },
-    }),
+    },
 
-    pool: getContract({
-      address: address.pool,
-      abi: UNI_V3_POOL_ABI,
-      client: { public: publicClient },
-    }),
+    pool: { address: address.pool, abi: UNI_V3_POOL_ABI },
   };
 }
 
@@ -49,8 +36,10 @@ export async function getPrice(
   client: PublicClient
 ) {
   const latestBlockNumber = await client.getBlockNumber();
+
+  //! Maybe not get price
   const logs = await pool.getEvents.Swap(undefined, {
-    fromBlock: latestBlockNumber - BigInt(100),
+    fromBlock: latestBlockNumber - BigInt(1000),
     toBlock: latestBlockNumber,
   });
 
